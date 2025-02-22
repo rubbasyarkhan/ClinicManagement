@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ClinicManagement.Models;
 
@@ -18,142 +16,173 @@ namespace ClinicManagement.Controllers
             _context = context;
         }
 
-        // GET: Orders
-        public async Task<IActionResult> Index()
+        // GET: Orders (With Filters)
+        public IActionResult Index(string status, string userName, DateTime? startDate, DateTime? endDate)
         {
-            var clinicManagementDbContext = _context.Orders.Include(o => o.User);
-            return View(await clinicManagementDbContext.ToListAsync());
+            var ordersQuery = _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .AsQueryable();
+
+            // Apply Filters
+            if (!string.IsNullOrEmpty(status))
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderStatus == status);
+            }
+
+            if (!string.IsNullOrEmpty(userName))
+            {
+                ordersQuery = ordersQuery.Where(o => o.User != null && o.User.FullName.Contains(userName));
+            }
+
+            if (startDate.HasValue)
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderDate >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderDate <= endDate.Value);
+            }
+
+            var orders = ordersQuery.ToList();
+
+            // Ensure TotalAmount Calculation
+            foreach (var order in orders)
+            {
+                order.TotalAmount = order.OrderDetails.Sum(od => od.Quantity * od.Price);
+            }
+
+            // Calculate Total Revenue for Delivered Orders
+            ViewBag.TotalRevenue = orders
+                .Where(o => o.OrderStatus == "Delivered")
+                .Sum(o => o.TotalAmount);
+
+            // Pass Filters to View
+            ViewBag.SelectedStatus = status;
+            ViewBag.SelectedUserName = userName;
+            ViewBag.SelectedStartDate = startDate?.ToString("yyyy-MM-dd");
+            ViewBag.SelectedEndDate = endDate?.ToString("yyyy-MM-dd");
+
+            return View(orders);
         }
 
         // GET: Orders/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders
+            var order = _context.Orders
                 .Include(o => o.User)
-                .FirstOrDefaultAsync(m => m.OrderId == id);
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .FirstOrDefault(o => o.OrderId == id);
+
             if (order == null)
             {
                 return NotFound();
             }
 
+            // Ensure TotalAmount Calculation
+            order.TotalAmount = order.OrderDetails.Sum(od => od.Quantity * od.Price);
+
             return View(order);
         }
 
-        // GET: Orders/Create
-        public IActionResult Create()
-        {
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
-            return View();
-        }
-
-        // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Update Order Status
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,UserId,OrderDate,TotalAmount,ShippingAddress,OrderStatus,PaymentMethod")] Order order)
+        public async Task<IActionResult> UpdateStatus(int id, string status)
         {
-            if (ModelState.IsValid)
+            if (id == 0 || string.IsNullOrEmpty(status))
             {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
+                TempData["Error"] = "Invalid request.";
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", order.UserId);
-            return View(order);
-        }
-
-        // GET: Orders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
             }
 
             var order = await _context.Orders.FindAsync(id);
             if (order == null)
             {
-                return NotFound();
-            }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", order.UserId);
-            return View(order);
-        }
-
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,UserId,OrderDate,TotalAmount,ShippingAddress,OrderStatus,PaymentMethod")] Order order)
-        {
-            if (id != order.OrderId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderExists(order.OrderId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                TempData["Error"] = "Order not found.";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", order.UserId);
-            return View(order);
-        }
 
-        // GET: Orders/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
+            try
             {
-                return NotFound();
+                order.OrderStatus = status;
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Order status updated successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Failed to update order status. " + ex.Message;
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
             var order = await _context.Orders
                 .Include(o => o.User)
-                .FirstOrDefaultAsync(m => m.OrderId == id);
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product) // Ensure product details are included
+                .FirstOrDefaultAsync(o => o.OrderId == id);
+
             if (order == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(order); // Redirect to the Delete.cshtml view
         }
 
-        // POST: Orders/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order != null)
+            if (order == null)
             {
-                _context.Orders.Remove(order);
+                TempData["Error"] = "Order not found.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Orders.Remove(order);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Order deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error deleting order: " + ex.Message;
+            }
+
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult PrintBill(int id)
+        {
+            var order = _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .FirstOrDefault(o => o.OrderId == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            // Ensure TotalAmount Calculation
+            order.TotalAmount = order.OrderDetails.Sum(od => od.Quantity * od.Price);
+
+            return View(order);
+        }
+
+
 
         private bool OrderExists(int id)
         {

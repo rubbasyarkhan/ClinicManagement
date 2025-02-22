@@ -46,9 +46,19 @@
                     <a asp-controller="Products" asp-action="Index" class="nav-item nav-link">
                         <i class="fa fa-pills me-2"></i>Products
                     </a>
-                    <a asp-controller="Orders" asp-action="Index" class="nav-item nav-link">
+                    <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="nav-item nav-link">
                         <i class="fa fa-shopping-cart me-2"></i>Orders
                     </a>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+                    }
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+                    }
+
                 </div>
             </nav>
         </div>

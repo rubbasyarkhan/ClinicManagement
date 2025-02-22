@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace ClinicManagement.Controllers
 {
@@ -27,13 +28,28 @@ namespace ClinicManagement.Controllers
             ViewBag.TotalProducts = _context.Products.Count();
             ViewBag.TotalOrders = _context.Orders.Count();
             ViewBag.TotalUsers = _context.Users.Count();
+
+            // 🔹 Optimized Total Revenue Calculation
+            decimal totalRevenue = _context.OrderDetails
+                .Where(od => od.Order.OrderStatus == "Delivered")
+                .Sum(od => (decimal?)od.Quantity * od.Price) ?? 0;
+            ViewBag.TotalRevenue = totalRevenue;
+
+            ViewBag.OrdersPerStatus = _context.Orders
+                .GroupBy(o => o.OrderStatus)
+                .Select(g => new { Status = g.Key, Count = g.Count() })
+                .ToList();
+
             return View();
         }
 
         // 🔹 Manage Products
         public IActionResult Products()
         {
-            var products = _context.Products.Include(p => p.Category).ToList(); // ✅ Include Category
+            var products = _context.Products
+                .Include(p => p.Category)
+                .AsNoTracking()
+                .ToList();
             return View(products);
         }
 
@@ -56,28 +72,23 @@ namespace ClinicManagement.Controllers
                 return View(product);
             }
 
-            if (ProductImage != null && ProductImage.Length > 0)
+            try
             {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                if (!Directory.Exists(uploadsFolder))
+                if (ProductImage != null && ProductImage.Length > 0)
                 {
-                    Directory.CreateDirectory(uploadsFolder);
+                    product.ImageUrl = SaveImage(ProductImage);
                 }
 
-                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ProductImage.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    ProductImage.CopyTo(stream);
-                }
-
-                product.ImageUrl = "/images/" + uniqueFileName;
+                _context.Products.Add(product);
+                _context.SaveChanges();
+                TempData["Success"] = "Product added successfully!";
+                return RedirectToAction(nameof(Products));
             }
-
-            _context.Products.Add(product);
-            _context.SaveChanges();
-            return RedirectToAction("Products");
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred: " + ex.Message;
+                return View(product);
+            }
         }
 
         // 🔹 Edit Product View
@@ -86,11 +97,9 @@ namespace ClinicManagement.Controllers
         {
             var product = _context.Products.Find(id);
             if (product == null)
-            {
                 return NotFound();
-            }
 
-            ViewBag.Categories = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId); // ✅ Pre-select category
+            ViewBag.Categories = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
             return View(product);
         }
 
@@ -105,65 +114,47 @@ namespace ClinicManagement.Controllers
                 return View(product);
             }
 
-            var existingProduct = _context.Products.Find(product.ProductId);
-            if (existingProduct == null)
+            try
             {
-                return NotFound();
+                var existingProduct = _context.Products.Find(product.ProductId);
+                if (existingProduct == null)
+                    return NotFound();
+
+                existingProduct.Name = product.Name;
+                existingProduct.Description = product.Description;
+                existingProduct.Price = product.Price;
+                existingProduct.StockQuantity = product.StockQuantity;
+                existingProduct.Manufacturer = product.Manufacturer;
+                existingProduct.CategoryId = product.CategoryId;
+
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    DeleteImage(existingProduct.ImageUrl);
+                    existingProduct.ImageUrl = SaveImage(ImageFile);
+                }
+
+                _context.Products.Update(existingProduct);
+                _context.SaveChanges();
+                TempData["Success"] = "Product updated successfully!";
+                return RedirectToAction(nameof(Products));
             }
-
-            // Update product properties
-            existingProduct.Name = product.Name;
-            existingProduct.Description = product.Description;
-            existingProduct.Price = product.Price;
-            existingProduct.StockQuantity = product.StockQuantity;
-            existingProduct.Manufacturer = product.Manufacturer;
-            existingProduct.CategoryId = product.CategoryId; // ✅ Ensure category is updated
-
-            if (ImageFile != null && ImageFile.Length > 0)
+            catch (Exception ex)
             {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-
-                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    ImageFile.CopyTo(stream);
-                }
-
-                // Delete old image if exists
-                if (!string.IsNullOrEmpty(existingProduct.ImageUrl))
-                {
-                    string oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, existingProduct.ImageUrl.TrimStart('/'));
-                    if (System.IO.File.Exists(oldImagePath))
-                    {
-                        System.IO.File.Delete(oldImagePath);
-                    }
-                }
-
-                existingProduct.ImageUrl = "/images/" + uniqueFileName;
+                TempData["Error"] = "An error occurred: " + ex.Message;
+                return View(product);
             }
-
-            _context.Products.Update(existingProduct);
-            _context.SaveChanges();
-            return RedirectToAction("Products"); // ✅ Redirect to Products List
         }
 
         // 🔹 Product Details Page
         public IActionResult Details(int id)
         {
             var product = _context.Products
-                .Include(p => p.Category) // ✅ Include category details
+                .Include(p => p.Category)
+                .AsNoTracking()
                 .FirstOrDefault(p => p.ProductId == id);
 
             if (product == null)
-            {
                 return NotFound();
-            }
 
             return View(product);
         }
@@ -173,13 +164,12 @@ namespace ClinicManagement.Controllers
         public IActionResult Delete(int id)
         {
             var product = _context.Products
-                .Include(p => p.Category) // Include category details
+                .Include(p => p.Category)
+                .AsNoTracking()
                 .FirstOrDefault(p => p.ProductId == id);
 
             if (product == null)
-            {
                 return NotFound();
-            }
 
             return View(product);
         }
@@ -188,24 +178,60 @@ namespace ClinicManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var product = _context.Products.Find(id);
-
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = _context.Products.Find(id);
+                if (product == null)
+                    return NotFound();
+
+                DeleteImage(product.ImageUrl);
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+
+                TempData["Success"] = "Product deleted successfully!";
+                return RedirectToAction(nameof(Products));
             }
-
-            _context.Products.Remove(product);
-            _context.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred: " + ex.Message;
+                return RedirectToAction(nameof(Products));
+            }
         }
-
 
         // 🔹 Helper Method: Check if Product Exists
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ProductId == id);
+        }
+
+        // 🔹 Helper Method: Save Image
+        private string SaveImage(IFormFile imageFile)
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            Directory.CreateDirectory(uploadsFolder);
+
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                imageFile.CopyTo(stream);
+            }
+
+            return "/images/" + uniqueFileName;
+        }
+
+        // 🔹 Helper Method: Delete Image
+        private void DeleteImage(string imageUrl)
+        {
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                string oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, imageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
         }
     }
 }

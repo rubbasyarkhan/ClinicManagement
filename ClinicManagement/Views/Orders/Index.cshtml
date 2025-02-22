@@ -1,66 +1,109 @@
 ﻿@model IEnumerable<ClinicManagement.Models.Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Orders";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h1>Index</h1>
+<h2 class="mb-4">Orders List</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+<!-- Filter Form -->
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label for="status" class="form-label">Order Status</label>
+            <select name="status" class="form-select">
+                <option value="">All</option>
+                <option value="Pending" selected="@(ViewBag.SelectedStatus == "Pending")">Pending</option>
+                <option value="Processed" selected="@(ViewBag.SelectedStatus == "Processed")">Processed</option>
+                <option value="Shipped" selected="@(ViewBag.SelectedStatus == "Shipped")">Shipped</option>
+                <option value="Delivered" selected="@(ViewBag.SelectedStatus == "Delivered")">Delivered</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="userName" class="form-label">User Name</label>
+            <input type="text" name="userName" class="form-control" placeholder="Enter user name" value="@ViewBag.SelectedUserName">
+        </div>
+
+        <div class="col-md-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" name="startDate" class="form-control" value="@ViewBag.SelectedStartDate">
+        </div>
+
+        <div class="col-md-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" name="endDate" class="form-control" value="@ViewBag.SelectedEndDate">
+        </div>
+
+        <div class="col-12 mt-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear</a>
+        </div>
+    </div>
+</form>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShippingAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PaymentMethod)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Products Ordered</th>
+            <th>Total Amount</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShippingAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentMethod)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@(order.User?.FullName ?? "Guest")</td>
+                <td>
+                    <ul class="mb-0">
+                        @foreach (var detail in order.OrderDetails)
+                        {
+                            <li>
+                                <strong>@detail.Product.Name</strong> - Qty: @detail.Quantity - Price: @($"{detail.Price:C}")
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td><strong>@($"{order.TotalAmount:C}")</strong></td>
+                <td>@order.OrderDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <form asp-action="UpdateStatus" method="post" class="d-flex align-items-center gap-2">
+                        <input type="hidden" name="id" value="@order.OrderId" />
+                        <select name="status" class="form-select form-select-sm w-auto">
+                            <option value="Pending" selected="@(order.OrderStatus == "Pending")">Pending</option>
+                            <option value="Processed" selected="@(order.OrderStatus == "Processed")">Processed</option>
+                            <option value="Shipped" selected="@(order.OrderStatus == "Shipped")">Shipped</option>
+                            <option value="Delivered" selected="@(order.OrderStatus == "Delivered")">Delivered</option>
+                        </select>
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    </form>
+                </td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-primary btn-sm">View</a>
+                        <a asp-action="Delete" asp-route-id="@order.OrderId" class="btn btn-danger btn-sm">Delete</a>
+
+
+
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

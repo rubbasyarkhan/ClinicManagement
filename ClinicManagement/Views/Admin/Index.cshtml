@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<ClinicManagement.Models.Order>
+
+@{
     ViewData["Title"] = "Admin Dashboard";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
@@ -9,31 +11,47 @@
     <div class="row">
         <!-- Total Products -->
         <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-body">
+            <div class="card text-white bg-primary mb-3 shadow-sm">
+                <div class="card-body text-center">
                     <h5 class="card-title">Total Products</h5>
-                    <p class="card-text display-4">@ViewBag.TotalProducts</p>
+                    <p class="card-text display-4 fw-bold">@ViewBag.TotalProducts</p>
                 </div>
             </div>
         </div>
 
         <!-- Total Orders -->
         <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-body">
+            <div class="card text-white bg-success mb-3 shadow-sm">
+                <div class="card-body text-center">
                     <h5 class="card-title">Total Orders</h5>
-                    <p class="card-text display-4">@ViewBag.TotalOrders</p>
+                    <p class="card-text display-4 fw-bold">@ViewBag.TotalOrders</p>
                 </div>
             </div>
         </div>
 
         <!-- Total Users -->
         <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-body">
+            <div class="card text-white bg-warning mb-3 shadow-sm">
+                <div class="card-body text-center">
                     <h5 class="card-title">Total Users</h5>
-                    <p class="card-text display-4">@ViewBag.TotalUsers</p>
+                    <p class="card-text display-4 fw-bold">@ViewBag.TotalUsers</p>
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- Total Revenue -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card text-white bg-info mb-3 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Revenue</h5>
+                    <p class="card-text display-4 fw-bold">@($"{ViewBag.TotalRevenue:C}")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest 5 Orders -->
+ 
+</div>
