@@ -52,7 +52,20 @@
         <li><a class="dropdown-item" asp-controller="Admin" asp-action="Medicines">Medicines</a></li>
         <li><a class="dropdown-item" asp-controller="Admin" asp-action="Tools">Medical Tools</a></li>
     </ul>
-</li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="educationEventsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Education Events</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="educationEventsDropdown">
+                            <li><a class="dropdown-item" asp-controller="EducationEvents" asp-action="Index">View Events</a></li>
+                            <li><a class="dropdown-item" asp-controller="EducationEvents" asp-action="Create">Create Event</a></li>
+                            <li><a class="dropdown-item" asp-controller="EventRegistrations" asp-action="Index">Event Registrations</a></li>
+                        </ul>
+                    </li>
+
+
+
 
                     <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="nav-item nav-link">
                         <i class="fa fa-shopping-cart me-2"></i>Orders
@@ -87,7 +100,8 @@
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
                             <a href="#" class="dropdown-item">Settings</a>
-                            <a asp-controller="Auth" asp-action="Logout" class="dropdown-item">Log Out</a>
+                            <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
+
                         </div>
                     </div>
                 </div>

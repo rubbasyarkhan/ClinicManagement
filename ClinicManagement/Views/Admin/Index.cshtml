@@ -39,6 +39,30 @@
             </div>
         </div>
     </div>
+    @{
+        var totalEvents = ViewBag.TotalEvents;
+        var totalRegistrations = ViewBag.TotalRegistrations;
+    }
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Events</h5>
+                    <p class="card-text">@totalEvents</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Registrations</h5>
+                    <p class="card-text">@totalRegistrations</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Total Revenue -->
     <div class="row mt-4">

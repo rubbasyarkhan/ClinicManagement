@@ -1,0 +1,50 @@
+﻿@model ClinicManagement.Models.EventRegistration
+
+@{
+    ViewData["Title"] = "Edit Event Registration";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1 class="text-primary">Edit Event Registration</h1>
+<hr />
+
+<div class="card shadow p-4">
+    <h4 class="mb-3">Update Registration Details</h4>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none"></div>
+                <input type="hidden" asp-for="RegistrationId" />
+
+                <div class="mb-3">
+                    <label asp-for="EventId" class="form-label fw-bold"></label>
+                    <select asp-for="EventId" class="form-select" asp-items="ViewBag.EventId"></select>
+                    <span asp-validation-for="EventId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="UserId" class="form-label fw-bold"></label>
+                    <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="RegistrationDate" class="form-label fw-bold"></label>
+                    <input asp-for="RegistrationDate" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="RegistrationDate" class="text-danger"></span>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

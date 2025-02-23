@@ -1,0 +1,34 @@
+﻿@model ClinicManagement.Models.Feedback
+
+@{
+    ViewData["Title"] = "Feedback Details";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1 class="text-primary">Feedback Details</h1>
+
+<div class="card shadow p-3 mb-4">
+    <h4 class="text-secondary">Feedback Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Comment)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Comment)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Rating)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Rating)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CreatedAt)</dd>
+
+        <dt class="col-sm-3">Product</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Product.Name)</dd> <!-- Changed from ProductId -->
+
+        <dt class="col-sm-3">User</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.User.FullName)</dd> <!-- Changed from UserId -->
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.FeedbackId" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+    <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+</div>
