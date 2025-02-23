@@ -43,9 +43,17 @@
                     <a asp-controller="Admin" asp-action="Index" class="nav-item nav-link focus active">
                         <i class="fa fa-tachometer-alt me-2"></i>Dashboard
                     </a>
-                    <a asp-controller="Products" asp-action="Index" class="nav-item nav-link">
-                        <i class="fa fa-pills me-2"></i>Products
-                    </a>
+                   <li class="nav-item dropdown">
+    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="fa fa-pills me-2"></i>Products
+    </a>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Products">All Products</a></li>
+        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Medicines">Medicines</a></li>
+        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Tools">Medical Tools</a></li>
+    </ul>
+</li>
+
                     <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="nav-item nav-link">
                         <i class="fa fa-shopping-cart me-2"></i>Orders
                     </a>
