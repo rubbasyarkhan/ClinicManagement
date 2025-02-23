@@ -19,6 +19,12 @@ public partial class ClinicManagementDbContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<EducationEvent> EducationEvents { get; set; }
+
+    public virtual DbSet<EventRegistration> EventRegistrations { get; set; }
+
+    public virtual DbSet<Feedback> Feedbacks { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -65,6 +71,57 @@ public partial class ClinicManagementDbContext : DbContext
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<EducationEvent>(entity =>
+        {
+            entity.HasKey(e => e.EventId).HasName("PK__Educatio__7944C870FC585AE8");
+
+            entity.Property(e => e.EventId).HasColumnName("EventID");
+            entity.Property(e => e.EventName).HasMaxLength(255);
+            entity.Property(e => e.Speaker).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<EventRegistration>(entity =>
+        {
+            entity.HasKey(e => e.RegistrationId).HasName("PK__EventReg__6EF58830ED3810A9");
+
+            entity.Property(e => e.RegistrationId).HasColumnName("RegistrationID");
+            entity.Property(e => e.EventId).HasColumnName("EventID");
+            entity.Property(e => e.RegistrationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Event).WithMany(p => p.EventRegistrations)
+                .HasForeignKey(d => d.EventId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__EventRegi__Event__59063A47");
+
+            entity.HasOne(d => d.User).WithMany(p => p.EventRegistrations)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__EventRegi__UserI__59FA5E80");
+        });
+
+        modelBuilder.Entity<Feedback>(entity =>
+        {
+            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__6A4BEDD67A18642E");
+
+            entity.ToTable("Feedback");
+
+            entity.Property(e => e.Comment).HasMaxLength(500);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.Feedbacks)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK__Feedback__Produc__5FB337D6");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Feedbacks)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__Feedback__UserId__60A75C0F");
         });
 
         modelBuilder.Entity<Order>(entity =>

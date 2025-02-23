@@ -1,0 +1,43 @@
+﻿@model ClinicManagement.Models.EventRegistration
+
+@{
+    ViewData["Title"] = "Create Event Registration";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1 class="mb-3">Create Event Registration</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="EventId" class="form-label">Select Event</label>
+                <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId">
+                    <option value="">-- Select Event --</option>
+                </select>
+                <span asp-validation-for="EventId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="UserId" class="form-label">Select User</label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId">
+                    <option value="">-- Select User --</option>
+                </select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="RegistrationDate" class="form-label">Registration Date</label>
+                <input asp-for="RegistrationDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Create</button>
+                <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>

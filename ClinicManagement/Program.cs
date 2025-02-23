@@ -1,4 +1,5 @@
 ﻿using ClinicManagement.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,18 @@ builder.Services.AddDbContext<ClinicManagementDbContext>(options =>
 // Enable Session Management
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
+
+// 🔹 Add Authentication & Cookie-based Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Redirect if not logged in
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Redirect if unauthorized
+        options.ExpireTimeSpan = TimeSpan.FromHours(1); // Set session timeout
+    });
+
+// 🔹 Add Authorization
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -29,6 +42,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSession();
+
+// 🔹 Enable Authentication & Authorization Middleware
+app.UseAuthentication(); // Ensures authentication before authorization
 app.UseAuthorization();
 
 // ✅ Corrected Admin Routes

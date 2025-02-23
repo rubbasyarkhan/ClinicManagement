@@ -8,9 +8,11 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicManagement.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ClinicManagementDbContext _context;
@@ -130,9 +132,52 @@ namespace ClinicManagement.Controllers
 
         public IActionResult Details(int id)
         {
-            var product = _context.Products.Include(p => p.Category).AsNoTracking().FirstOrDefault(p => p.ProductId == id);
-            return product == null ? NotFound() : View(product);
+            var product = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Feedbacks) // Ensure navigation exists
+                .ThenInclude(f => f.User)  // Include user who gave feedback
+                .AsNoTracking()
+                .FirstOrDefault(p => p.ProductId == id);
+
+            if (product == null) return NotFound();
+
+            return View(product);
         }
+
+        [HttpPost]
+        public IActionResult SubmitFeedback(int productId, string comment, int rating)
+        {
+            var userId = User.Identity.Name; // Assuming username is stored
+            var user = _context.Users.FirstOrDefault(u => u.Username == userId);
+
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found. Please log in." });
+            }
+
+            var feedback = new Feedback
+            {
+                ProductId = productId,
+                UserId = user.UserId, // Assuming you have UserId
+                Comment = comment,
+                Rating = rating,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Feedbacks.Add(feedback);
+            _context.SaveChanges();
+
+            return Json(new
+            {
+                success = true,
+                user = user.FullName,
+                comment,
+                rating,
+                date = feedback.CreatedAt?.ToShortDateString() ?? "N/A"
+            });
+
+        }
+
 
         [HttpGet]
         public IActionResult Delete(int id)

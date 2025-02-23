@@ -1,0 +1,67 @@
+﻿@model ClinicManagement.Models.Feedback
+
+@{
+    ViewData["Title"] = "Edit Feedback";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1 class="text-primary">Edit Feedback</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <input type="hidden" asp-for="FeedbackId" />
+
+            <!-- Product Dropdown -->
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label">Product</label>
+                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId">
+                    <option value="">-- Select a Product --</option>
+                </select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+
+            <!-- User Dropdown -->
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label">User</label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId">
+                    <option value="">-- Select a User --</option>
+                </select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+
+            <!-- Comment Input -->
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label">Comment</label>
+                <textarea asp-for="Comment" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+
+            <!-- Rating Input -->
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label">Rating (1-5)</label>
+                <input asp-for="Rating" class="form-control" type="number" min="1" max="5" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+
+            <!-- CreatedAt Input -->
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label">Created At</label>
+                <input asp-for="CreatedAt" class="form-control" type="datetime-local" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+
+            <!-- Save Button -->
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
