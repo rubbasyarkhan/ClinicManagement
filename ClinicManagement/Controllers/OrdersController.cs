@@ -99,7 +99,11 @@ namespace ClinicManagement.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product) // Include products in the order
+                .FirstOrDefaultAsync(o => o.OrderId == id);
+
             if (order == null)
             {
                 TempData["Error"] = "Order not found.";
@@ -108,14 +112,84 @@ namespace ClinicManagement.Controllers
 
             try
             {
+                // Update order status
                 order.OrderStatus = status;
-                _context.Update(order);
+
+                // If order status is "Delivered", update stock
+                if (status == "Delivered")
+                {
+                    foreach (var orderDetail in order.OrderDetails)
+                    {
+                        var product = orderDetail.Product;
+
+                        // Ensure stock quantity doesn't go negative
+                        if (product.StockQuantity >= orderDetail.Quantity)
+                        {
+                            product.StockQuantity -= orderDetail.Quantity; // Decrease stock
+                        }
+                        else
+                        {
+                            TempData["Error"] = "Not enough stock available for one or more products.";
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+
+                    // Update products in database
+                    _context.Products.UpdateRange(order.OrderDetails.Select(od => od.Product));
+                }
+
+                // Save changes
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Order status updated successfully.";
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Failed to update order status. " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Place an Order (Order Confirmation)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateOrder(Order order)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(order);
+            }
+
+            try
+            {
+                // Ensure stock is available for each product in the order
+                foreach (var orderDetail in order.OrderDetails)
+                {
+                    var product = orderDetail.Product;
+
+                    if (product.StockQuantity >= orderDetail.Quantity)
+                    {
+                        product.StockQuantity -= orderDetail.Quantity; // Decrease stock
+                    }
+                    else
+                    {
+                        TempData["Error"] = $"Not enough stock for product: {product.Name}.";
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    // Update product in the database
+                    _context.Products.Update(product);
+                }
+
+                // Add the order to the database
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Order placed successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error placing order: " + ex.Message;
             }
 
             return RedirectToAction(nameof(Index));
@@ -151,6 +225,17 @@ namespace ClinicManagement.Controllers
 
             try
             {
+                // If order is canceled, restock the products
+                if (order.OrderStatus == "Canceled")
+                {
+                    foreach (var orderDetail in order.OrderDetails)
+                    {
+                        var product = orderDetail.Product;
+                        product.StockQuantity += orderDetail.Quantity; // Restock products
+                        _context.Products.Update(product);
+                    }
+                }
+
                 _context.Orders.Remove(order);
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Order deleted successfully.";
@@ -181,8 +266,6 @@ namespace ClinicManagement.Controllers
 
             return View(order);
         }
-
-
 
         private bool OrderExists(int id)
         {

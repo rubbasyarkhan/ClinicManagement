@@ -5,52 +5,148 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h1>Products</h1>
+<h1 class="mb-4">Products</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+<!-- Cards for Medicines & Medical Equipment -->
+<div class="row">
+    <!-- Medicines Card -->
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h5 class="card-title">Medicines</h5>
+                <p class="card-text">View all available medicines.</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#medicinesModal">
+                    View Medicines <span class="badge bg-light text-dark">@ViewBag.TotalMedicines</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
-<table class="table table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.Description)</th>
-            <th>@Html.DisplayNameFor(model => model.Price)</th>
-            <th>@Html.DisplayNameFor(model => model.StockQuantity)</th>
-            <th>@Html.DisplayNameFor(model => model.Manufacturer)</th>
-            <th>Image</th>  @* Display product image *@
-            <th>@Html.DisplayNameFor(model => model.Category)</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                <td>@Html.DisplayFor(modelItem => item.StockQuantity)</td>
-                <td>@Html.DisplayFor(modelItem => item.Manufacturer)</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.ImageUrl))
-                    {
-                        <img src="@item.ImageUrl" alt="Product Image" width="100" height="100" class="img-thumbnail" />
-                    }
-                    else
-                    {
-                        <span>No Image</span>
-                    }
-                </td>
-                <td>@(item.Category != null ? item.Category.CategoryName : "Uncategorized")</td>
+    <!-- Medical Equipment Card -->
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h5 class="card-title">Medical Equipment</h5>
+                <p class="card-text">View all available medical tools.</p>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#toolsModal">
+                    View Equipment <span class="badge bg-light text-dark">@ViewBag.TotalTools</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-info btn-sm">View Details</a>
-                    <a asp-controller="Admin" asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-primary btn-sm">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<!-- Modal for Medicines -->
+<div class="modal fade" id="medicinesModal" tabindex="-1" aria-labelledby="medicinesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="medicinesModalLabel">Medicines</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.Description)</th>
+                            <th>@Html.DisplayNameFor(model => model.Price)</th>
+                            <th>@Html.DisplayNameFor(model => model.StockQuantity)</th>
+                            <th>@Html.DisplayNameFor(model => model.Manufacturer)</th>
+                            <th>Image</th>
+                            <th>@Html.DisplayNameFor(model => model.Category)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(p => p.Category == null || p.Category.CategoryName != "Medical Equipment"))
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>@item.Price</td>
+                                <td>@item.StockQuantity</td>
+                                <td>@item.Manufacturer</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl" alt="Product Image" width="100" height="100" class="img-thumbnail" />
+                                    }
+                                    else
+                                    {
+                                        <span>No Image</span>
+                                    }
+                                </td>
+                                <td>@(item.Category?.CategoryName ?? "Uncategorized")</td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-info btn-sm">View</a>
+                                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-primary btn-sm">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Medical Equipment -->
+<div class="modal fade" id="toolsModal" tabindex="-1" aria-labelledby="toolsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="toolsModalLabel">Medical Equipment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.Description)</th>
+                            <th>@Html.DisplayNameFor(model => model.Price)</th>
+                            <th>@Html.DisplayNameFor(model => model.StockQuantity)</th>
+                            <th>@Html.DisplayNameFor(model => model.Manufacturer)</th>
+                            <th>Image</th>
+                            <th>@Html.DisplayNameFor(model => model.Category)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(p => p.Category != null && p.Category.CategoryName == "Medical Equipment"))
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>@item.Price</td>
+                                <td>@item.StockQuantity</td>
+                                <td>@item.Manufacturer</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl" alt="Product Image" width="100" height="100" class="img-thumbnail" />
+                                    }
+                                    else
+                                    {
+                                        <span>No Image</span>
+                                    }
+                                </td>
+                                <td>@item.Category.CategoryName</td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-info btn-sm">View</a>
+                                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-primary btn-sm">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JavaScript (for modals) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
