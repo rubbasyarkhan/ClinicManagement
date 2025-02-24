@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ClinicManagement.Models.Product>
+
+@{
+    ViewData["Title"] = "Medicines";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+}
+
+<h1 class="text-center mb-4">Medicines</h1>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <input type="text" id="searchBar" class="form-control" placeholder="Search by name..." onkeyup="filterProducts()">
+    </div>
+    <div class="col-md-6">
+        <select id="categoryFilter" class="form-control" onchange="filterProducts()">
+            <option value="">All Categories</option>
+            @foreach (var category in Model.Where(p => p.Category != null)
+            .Select(p => p.Category.CategoryName)
+            .Distinct())
+            {
+                <option value="@category">@category</option>
+            }
+        </select>
+    </div>
+
+</div>
+
+<div class="row" id="productList">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-6 col-lg-4 text-center item mb-4 pro-item"
+             data-name="@(item.Name?.ToLower().Trim())"
+             data-category="@(item.Category?.CategoryName.ToLower().Trim() ?? "unknown")">
+
+            <a href="@Url.Action("Details", "Client", new { id = item.ProductId })">
+                <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid" style="max-width: 150px; height: auto;">
+            </a>
+            <h3 class="text-dark mt-2">
+                <a href="@Url.Action("Details", "Client", new { id = item.ProductId })">@item.Name</a>
+            </h3>
+            <p class="price">
+                <span>@item.Price.ToString("C")</span>
+            </p>
+        </div>
+    }
+</div>
+
+
+<script>
+    function filterProducts() {
+        let searchQuery = document.getElementById("searchBar").value.toLowerCase();
+        let selectedCategory = document.getElementById("categoryFilter").value.trim().toLowerCase();
+        let products = document.querySelectorAll(".pro-item");
+
+        products.forEach(product => {
+            let productName = product.getAttribute("data-name")?.trim() || "";
+            let productCategory = product.getAttribute("data-category")?.trim().toLowerCase() || "";
+
+            let nameMatches = productName.includes(searchQuery) || searchQuery === "";
+            let categoryMatches = (productCategory === selectedCategory || selectedCategory === "");
+
+            if (nameMatches && categoryMatches) {
+                product.style.display = "block";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    }
+</script>
+
