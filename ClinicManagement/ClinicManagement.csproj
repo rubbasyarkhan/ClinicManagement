@@ -21,8 +21,4 @@
     <None Include="wwwroot\Client\assets\scss\bootstrap\.DS_Store" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-
 </Project>
