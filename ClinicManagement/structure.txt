@@ -1,0 +1,861 @@
+Folder PATH listing
+Volume serial number is D4A0-238B
+C:.
+³   appsettings.Development.json
+³   appsettings.json
+³   ClinicManagement.csproj
+³   ClinicManagement.csproj.user
+³   Program.cs
+³   structure.txt
+³   
+ÃÄÄÄbin
+³   ÀÄÄÄDebug
+³       ÀÄÄÄnet8.0
+³           ³   appsettings.Development.json
+³           ³   appsettings.json
+³           ³   Azure.Core.dll
+³           ³   Azure.Identity.dll
+³           ³   ClinicManagement.deps.json
+³           ³   ClinicManagement.dll
+³           ³   ClinicManagement.exe
+³           ³   ClinicManagement.pdb
+³           ³   ClinicManagement.runtimeconfig.json
+³           ³   ClinicManagement.staticwebassets.runtime.json
+³           ³   dotnet-aspnet-codegenerator-design.dll
+³           ³   Humanizer.dll
+³           ³   Microsoft.AspNetCore.Razor.Language.dll
+³           ³   Microsoft.Bcl.AsyncInterfaces.dll
+³           ³   Microsoft.Build.dll
+³           ³   Microsoft.Build.Framework.dll
+³           ³   Microsoft.CodeAnalysis.AnalyzerUtilities.dll
+³           ³   Microsoft.CodeAnalysis.CSharp.dll
+³           ³   Microsoft.CodeAnalysis.CSharp.Features.dll
+³           ³   Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+³           ³   Microsoft.CodeAnalysis.dll
+³           ³   Microsoft.CodeAnalysis.Elfie.dll
+³           ³   Microsoft.CodeAnalysis.Features.dll
+³           ³   Microsoft.CodeAnalysis.Razor.dll
+³           ³   Microsoft.CodeAnalysis.Scripting.dll
+³           ³   Microsoft.CodeAnalysis.Workspaces.dll
+³           ³   Microsoft.Data.SqlClient.dll
+³           ³   Microsoft.DiaSymReader.dll
+³           ³   Microsoft.DotNet.Scaffolding.Shared.dll
+³           ³   Microsoft.EntityFrameworkCore.Abstractions.dll
+³           ³   Microsoft.EntityFrameworkCore.Design.dll
+³           ³   Microsoft.EntityFrameworkCore.dll
+³           ³   Microsoft.EntityFrameworkCore.Relational.dll
+³           ³   Microsoft.EntityFrameworkCore.SqlServer.dll
+³           ³   Microsoft.Extensions.Caching.Memory.dll
+³           ³   Microsoft.Extensions.DependencyInjection.Abstractions.dll
+³           ³   Microsoft.Extensions.DependencyInjection.dll
+³           ³   Microsoft.Extensions.DependencyModel.dll
+³           ³   Microsoft.Extensions.Logging.Abstractions.dll
+³           ³   Microsoft.Extensions.Logging.dll
+³           ³   Microsoft.Extensions.Options.dll
+³           ³   Microsoft.Identity.Client.dll
+³           ³   Microsoft.Identity.Client.Extensions.Msal.dll
+³           ³   Microsoft.IdentityModel.Abstractions.dll
+³           ³   Microsoft.IdentityModel.JsonWebTokens.dll
+³           ³   Microsoft.IdentityModel.Logging.dll
+³           ³   Microsoft.IdentityModel.Protocols.dll
+³           ³   Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+³           ³   Microsoft.IdentityModel.Tokens.dll
+³           ³   Microsoft.NET.StringTools.dll
+³           ³   Microsoft.SqlServer.Server.dll
+³           ³   Microsoft.VisualStudio.Web.CodeGeneration.Core.dll
+³           ³   Microsoft.VisualStudio.Web.CodeGeneration.dll
+³           ³   Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll
+³           ³   Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll
+³           ³   Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll
+³           ³   Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
+³           ³   Microsoft.Win32.SystemEvents.dll
+³           ³   Mono.TextTemplating.dll
+³           ³   Newtonsoft.Json.dll
+³           ³   NuGet.Common.dll
+³           ³   NuGet.Configuration.dll
+³           ³   NuGet.DependencyResolver.Core.dll
+³           ³   NuGet.Frameworks.dll
+³           ³   NuGet.LibraryModel.dll
+³           ³   NuGet.Packaging.dll
+³           ³   NuGet.ProjectModel.dll
+³           ³   NuGet.Protocol.dll
+³           ³   NuGet.Versioning.dll
+³           ³   System.ClientModel.dll
+³           ³   System.CodeDom.dll
+³           ³   System.Composition.AttributedModel.dll
+³           ³   System.Composition.Convention.dll
+³           ³   System.Composition.Hosting.dll
+³           ³   System.Composition.Runtime.dll
+³           ³   System.Composition.TypedParts.dll
+³           ³   System.Configuration.ConfigurationManager.dll
+³           ³   System.Drawing.Common.dll
+³           ³   System.Formats.Asn1.dll
+³           ³   System.IdentityModel.Tokens.Jwt.dll
+³           ³   System.Memory.Data.dll
+³           ³   System.Reflection.MetadataLoadContext.dll
+³           ³   System.Runtime.Caching.dll
+³           ³   System.Security.Cryptography.ProtectedData.dll
+³           ³   System.Security.Permissions.dll
+³           ³   System.Windows.Extensions.dll
+³           ³   
+³           ÃÄÄÄaf
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄar
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄaz
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄbg
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄbn-BD
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄcs
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄda
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄde
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄel
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄes
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄfa
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄfi-FI
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄfr
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄfr-BE
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄhe
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄhr
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄhu
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄhy
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄid
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄis
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄit
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄja
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄko
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄko-KR
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄku
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄlv
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄms-MY
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄmt
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄnb
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄnb-NO
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄnl
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄpl
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄpt
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄpt-BR
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄro
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄru
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄruntimes
+³           ³   ÃÄÄÄunix
+³           ³   ³   ÀÄÄÄlib
+³           ³   ³       ÀÄÄÄnet6.0
+³           ³   ³               Microsoft.Data.SqlClient.dll
+³           ³   ³               
+³           ³   ÃÄÄÄwin
+³           ³   ³   ÀÄÄÄlib
+³           ³   ³       ÃÄÄÄnet6.0
+³           ³   ³       ³       Microsoft.Data.SqlClient.dll
+³           ³   ³       ³       System.Runtime.Caching.dll
+³           ³   ³       ³       
+³           ³   ³       ÀÄÄÄnet7.0
+³           ³   ³               Microsoft.Win32.SystemEvents.dll
+³           ³   ³               System.Drawing.Common.dll
+³           ³   ³               System.Security.Cryptography.ProtectedData.dll
+³           ³   ³               System.Windows.Extensions.dll
+³           ³   ³               
+³           ³   ÃÄÄÄwin-arm
+³           ³   ³   ÀÄÄÄnative
+³           ³   ³           Microsoft.Data.SqlClient.SNI.dll
+³           ³   ³           
+³           ³   ÃÄÄÄwin-arm64
+³           ³   ³   ÀÄÄÄnative
+³           ³   ³           Microsoft.Data.SqlClient.SNI.dll
+³           ³   ³           
+³           ³   ÃÄÄÄwin-x64
+³           ³   ³   ÀÄÄÄnative
+³           ³   ³           Microsoft.Data.SqlClient.SNI.dll
+³           ³   ³           
+³           ³   ÀÄÄÄwin-x86
+³           ³       ÀÄÄÄnative
+³           ³               Microsoft.Data.SqlClient.SNI.dll
+³           ³               
+³           ÃÄÄÄsk
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄsl
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄsr
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄsr-Latn
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄsv
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄth-TH
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄtr
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÃÄÄÄuk
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄuz-Cyrl-UZ
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄuz-Latn-UZ
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄvi
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄzh-CN
+³           ³       Humanizer.resources.dll
+³           ³       
+³           ÃÄÄÄzh-Hans
+³           ³       Humanizer.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.resources.dll
+³           ³       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³           ³       Microsoft.CodeAnalysis.Features.resources.dll
+³           ³       Microsoft.CodeAnalysis.resources.dll
+³           ³       Microsoft.CodeAnalysis.Scripting.resources.dll
+³           ³       Microsoft.CodeAnalysis.Workspaces.resources.dll
+³           ³       
+³           ÀÄÄÄzh-Hant
+³                   Humanizer.resources.dll
+³                   Microsoft.CodeAnalysis.CSharp.Features.resources.dll
+³                   Microsoft.CodeAnalysis.CSharp.resources.dll
+³                   Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+³                   Microsoft.CodeAnalysis.Features.resources.dll
+³                   Microsoft.CodeAnalysis.resources.dll
+³                   Microsoft.CodeAnalysis.Scripting.resources.dll
+³                   Microsoft.CodeAnalysis.Workspaces.resources.dll
+³                   
+ÃÄÄÄControllers
+³       AccountController.cs
+³       AdminController.cs
+³       AuthController.cs
+³       ClientController.cs
+³       EducationEventsController.cs
+³       EventRegistrationsController.cs
+³       FeedbacksController.cs
+³       HomeController.cs
+³       OrderDetailsController.cs
+³       OrdersController.cs
+³       
+ÃÄÄÄModels
+³       Cart.cs
+³       Category.cs
+³       ClinicManagementDbContext.cs
+³       EducationEvent.cs
+³       ErrorViewModel.cs
+³       EventRegistration.cs
+³       Feedback.cs
+³       Order.cs
+³       OrderDetail.cs
+³       Product.cs
+³       User.cs
+³       
+ÃÄÄÄobj
+³   ³   ClinicManagement.csproj.nuget.dgspec.json
+³   ³   ClinicManagement.csproj.nuget.g.props
+³   ³   ClinicManagement.csproj.nuget.g.targets
+³   ³   project.assets.json
+³   ³   project.nuget.cache
+³   ³   
+³   ÀÄÄÄDebug
+³       ÀÄÄÄnet8.0
+³           ³   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+³           ³   ApiEndpoints.json
+³           ³   apphost.exe
+³           ³   ClinicMa.D65B9BD0.Up2Date
+³           ³   ClinicManagement.AssemblyInfo.cs
+³           ³   ClinicManagement.AssemblyInfoInputs.cache
+³           ³   ClinicManagement.assets.cache
+³           ³   ClinicManagement.csproj.AssemblyReference.cache
+³           ³   ClinicManagement.csproj.BuildWithSkipAnalyzers
+³           ³   ClinicManagement.csproj.CoreCompileInputs.cache
+³           ³   ClinicManagement.csproj.FileListAbsolute.txt
+³           ³   ClinicManagement.dll
+³           ³   ClinicManagement.GeneratedMSBuildEditorConfig.editorconfig
+³           ³   ClinicManagement.genruntimeconfig.cache
+³           ³   ClinicManagement.GlobalUsings.g.cs
+³           ³   ClinicManagement.MvcApplicationPartsAssemblyInfo.cache
+³           ³   ClinicManagement.pdb
+³           ³   ClinicManagement.RazorAssemblyInfo.cache
+³           ³   ClinicManagement.RazorAssemblyInfo.cs
+³           ³   ClinicManagement.sourcelink.json
+³           ³   staticwebassets.build.json
+³           ³   staticwebassets.development.json
+³           ³   staticwebassets.pack.json
+³           ³   
+³           ÃÄÄÄref
+³           ³       ClinicManagement.dll
+³           ³       
+³           ÃÄÄÄrefint
+³           ³       ClinicManagement.dll
+³           ³       
+³           ÃÄÄÄscopedcss
+³           ³   ÃÄÄÄbundle
+³           ³   ³       ClinicManagement.styles.css
+³           ³   ³       
+³           ³   ÃÄÄÄprojectbundle
+³           ³   ³       ClinicManagement.bundle.scp.css
+³           ³   ³       
+³           ³   ÀÄÄÄViews
+³           ³       ÀÄÄÄShared
+³           ³               _Layout.cshtml.rz.scp.css
+³           ³               
+³           ÀÄÄÄstaticwebassets
+³                   msbuild.build.ClinicManagement.props
+³                   msbuild.buildMultiTargeting.ClinicManagement.props
+³                   msbuild.buildTransitive.ClinicManagement.props
+³                   msbuild.ClinicManagement.Microsoft.AspNetCore.StaticWebAssets.props
+³                   
+ÃÄÄÄProperties
+³       launchSettings.json
+³       
+ÃÄÄÄViewModels
+³       ClientHomeViewModel.cs
+³       ProductViewModel.cs
+³       
+ÃÄÄÄViews
+³   ³   _ViewImports.cshtml
+³   ³   _ViewStart.cshtml
+³   ³   
+³   ÃÄÄÄAccount
+³   ³       Login.cshtml
+³   ³       
+³   ÃÄÄÄAdmin
+³   ³       AddProduct.cshtml
+³   ³       Delete.cshtml
+³   ³       Details.cshtml
+³   ³       Edit.cshtml
+³   ³       Index.cshtml
+³   ³       Medicines.cshtml
+³   ³       Products.cshtml
+³   ³       Tools.cshtml
+³   ³       
+³   ÃÄÄÄAuth
+³   ³       Login.cshtml
+³   ³       Register.cshtml
+³   ³       
+³   ÃÄÄÄClient
+³   ³       Index.cshtml
+³   ³       ProductDetails.cshtml
+³   ³       Products.cshtml
+³   ³       
+³   ÃÄÄÄEducationEvents
+³   ³       Create.cshtml
+³   ³       Delete.cshtml
+³   ³       Details.cshtml
+³   ³       Edit.cshtml
+³   ³       Index.cshtml
+³   ³       
+³   ÃÄÄÄEventRegistrations
+³   ³       Create.cshtml
+³   ³       Delete.cshtml
+³   ³       Details.cshtml
+³   ³       Edit.cshtml
+³   ³       Index.cshtml
+³   ³       
+³   ÃÄÄÄFeedbacks
+³   ³       Create.cshtml
+³   ³       Delete.cshtml
+³   ³       Details.cshtml
+³   ³       Edit.cshtml
+³   ³       Index.cshtml
+³   ³       
+³   ÃÄÄÄHome
+³   ³       Index.cshtml
+³   ³       Privacy.cshtml
+³   ³       
+³   ÃÄÄÄOrderDetails
+³   ³       Create.cshtml
+³   ³       Delete.cshtml
+³   ³       Details.cshtml
+³   ³       Edit.cshtml
+³   ³       Index.cshtml
+³   ³       
+³   ÃÄÄÄOrders
+³   ³       Create.cshtml
+³   ³       Delete.cshtml
+³   ³       Details.cshtml
+³   ³       Edit.cshtml
+³   ³       Index.cshtml
+³   ³       PrintBill.cshtml
+³   ³       
+³   ÀÄÄÄShared
+³           AdminLayout.cshtml
+³           ClientLayout.cshtml
+³           Error.cshtml
+³           _Layout.cshtml
+³           _Layout.cshtml.css
+³           _ValidationScriptsPartial.cshtml
+³           
+ÀÄÄÄwwwroot
+    ÃÄÄÄAdmin
+    ³   ÀÄÄÄassets
+    ³       ÃÄÄÄcss
+    ³       ³       bootstrap.min.css
+    ³       ³       style.css
+    ³       ³       
+    ³       ÃÄÄÄimg
+    ³       ³       testimonial-1.jpg
+    ³       ³       testimonial-2.jpg
+    ³       ³       user.jpg
+    ³       ³       
+    ³       ÃÄÄÄjs
+    ³       ³       main.js
+    ³       ³       
+    ³       ÃÄÄÄlib
+    ³       ³   ÃÄÄÄchart
+    ³       ³   ³       chart.min.js
+    ³       ³   ³       
+    ³       ³   ÃÄÄÄeasing
+    ³       ³   ³       easing.js
+    ³       ³   ³       easing.min.js
+    ³       ³   ³       
+    ³       ³   ÃÄÄÄowlcarousel
+    ³       ³   ³   ³   LICENSE
+    ³       ³   ³   ³   owl.carousel.js
+    ³       ³   ³   ³   owl.carousel.min.js
+    ³       ³   ³   ³   
+    ³       ³   ³   ÀÄÄÄassets
+    ³       ³   ³           ajax-loader.gif
+    ³       ³   ³           owl.carousel.css
+    ³       ³   ³           owl.carousel.min.css
+    ³       ³   ³           owl.theme.default.css
+    ³       ³   ³           owl.theme.default.min.css
+    ³       ³   ³           owl.theme.green.css
+    ³       ³   ³           owl.theme.green.min.css
+    ³       ³   ³           owl.video.play.png
+    ³       ³   ³           
+    ³       ³   ÃÄÄÄtempusdominus
+    ³       ³   ³   ÃÄÄÄcss
+    ³       ³   ³   ³       tempusdominus-bootstrap-4.css
+    ³       ³   ³   ³       tempusdominus-bootstrap-4.min.css
+    ³       ³   ³   ³       
+    ³       ³   ³   ÀÄÄÄjs
+    ³       ³   ³           moment-timezone.min.js
+    ³       ³   ³           moment.min.js
+    ³       ³   ³           tempusdominus-bootstrap-4.js
+    ³       ³   ³           tempusdominus-bootstrap-4.min.js
+    ³       ³   ³           
+    ³       ³   ÀÄÄÄwaypoints
+    ³       ³           links.php
+    ³       ³           waypoints.min.js
+    ³       ³           
+    ³       ÀÄÄÄscss
+    ³           ³   bootstrap.scss
+    ³           ³   
+    ³           ÀÄÄÄbootstrap
+    ³               ÀÄÄÄscss
+    ³                   ³   bootstrap-grid.scss
+    ³                   ³   bootstrap-reboot.scss
+    ³                   ³   bootstrap-utilities.scss
+    ³                   ³   bootstrap.scss
+    ³                   ³   _accordion.scss
+    ³                   ³   _alert.scss
+    ³                   ³   _badge.scss
+    ³                   ³   _breadcrumb.scss
+    ³                   ³   _button-group.scss
+    ³                   ³   _buttons.scss
+    ³                   ³   _card.scss
+    ³                   ³   _carousel.scss
+    ³                   ³   _close.scss
+    ³                   ³   _containers.scss
+    ³                   ³   _dropdown.scss
+    ³                   ³   _forms.scss
+    ³                   ³   _functions.scss
+    ³                   ³   _grid.scss
+    ³                   ³   _helpers.scss
+    ³                   ³   _images.scss
+    ³                   ³   _list-group.scss
+    ³                   ³   _mixins.scss
+    ³                   ³   _modal.scss
+    ³                   ³   _nav.scss
+    ³                   ³   _navbar.scss
+    ³                   ³   _offcanvas.scss
+    ³                   ³   _pagination.scss
+    ³                   ³   _popover.scss
+    ³                   ³   _progress.scss
+    ³                   ³   _reboot.scss
+    ³                   ³   _root.scss
+    ³                   ³   _spinners.scss
+    ³                   ³   _tables.scss
+    ³                   ³   _toasts.scss
+    ³                   ³   _tooltip.scss
+    ³                   ³   _transitions.scss
+    ³                   ³   _type.scss
+    ³                   ³   _utilities.scss
+    ³                   ³   _variables.scss
+    ³                   ³   
+    ³                   ÃÄÄÄforms
+    ³                   ³       _floating-labels.scss
+    ³                   ³       _form-check.scss
+    ³                   ³       _form-control.scss
+    ³                   ³       _form-range.scss
+    ³                   ³       _form-select.scss
+    ³                   ³       _form-text.scss
+    ³                   ³       _input-group.scss
+    ³                   ³       _labels.scss
+    ³                   ³       _validation.scss
+    ³                   ³       
+    ³                   ÃÄÄÄhelpers
+    ³                   ³       _clearfix.scss
+    ³                   ³       _colored-links.scss
+    ³                   ³       _position.scss
+    ³                   ³       _ratio.scss
+    ³                   ³       _stretched-link.scss
+    ³                   ³       _text-truncation.scss
+    ³                   ³       _visually-hidden.scss
+    ³                   ³       
+    ³                   ÃÄÄÄmixins
+    ³                   ³       _alert.scss
+    ³                   ³       _border-radius.scss
+    ³                   ³       _box-shadow.scss
+    ³                   ³       _breakpoints.scss
+    ³                   ³       _buttons.scss
+    ³                   ³       _caret.scss
+    ³                   ³       _clearfix.scss
+    ³                   ³       _color-scheme.scss
+    ³                   ³       _container.scss
+    ³                   ³       _deprecate.scss
+    ³                   ³       _forms.scss
+    ³                   ³       _gradients.scss
+    ³                   ³       _grid.scss
+    ³                   ³       _image.scss
+    ³                   ³       _list-group.scss
+    ³                   ³       _lists.scss
+    ³                   ³       _pagination.scss
+    ³                   ³       _reset-text.scss
+    ³                   ³       _resize.scss
+    ³                   ³       _table-variants.scss
+    ³                   ³       _text-truncate.scss
+    ³                   ³       _transition.scss
+    ³                   ³       _utilities.scss
+    ³                   ³       _visually-hidden.scss
+    ³                   ³       
+    ³                   ÃÄÄÄutilities
+    ³                   ³       _api.scss
+    ³                   ³       
+    ³                   ÀÄÄÄvendor
+    ³                           _rfs.scss
+    ³                           
+    ÃÄÄÄClient
+    ³   ÀÄÄÄassets
+    ³       ÃÄÄÄcss
+    ³       ³   ³   aos.css
+    ³       ³   ³   bootstrap.min.css
+    ³       ³   ³   bootstrap.min.css.map
+    ³       ³   ³   jquery-ui.css
+    ³       ³   ³   magnific-popup.css
+    ³       ³   ³   owl.carousel.min.css
+    ³       ³   ³   owl.theme.default.min.css
+    ³       ³   ³   style.css
+    ³       ³   ³   
+    ³       ³   ÀÄÄÄbootstrap
+    ³       ³           bootstrap-grid.css
+    ³       ³           bootstrap-reboot.css
+    ³       ³           bootstrap.css
+    ³       ³           
+    ³       ÃÄÄÄfonts
+    ³       ³   ÀÄÄÄicomoon
+    ³       ³       ³   demo.html
+    ³       ³       ³   Read Me.txt
+    ³       ³       ³   selection.json
+    ³       ³       ³   style.css
+    ³       ³       ³   
+    ³       ³       ÃÄÄÄdemo-files
+    ³       ³       ³       demo.css
+    ³       ³       ³       demo.js
+    ³       ³       ³       
+    ³       ³       ÀÄÄÄfonts
+    ³       ³               icomoon.eot
+    ³       ³               icomoon.svg
+    ³       ³               icomoon.ttf
+    ³       ³               icomoon.woff
+    ³       ³               
+    ³       ÃÄÄÄimages
+    ³       ³       .DS_Store
+    ³       ³       bg_1.jpg
+    ³       ³       bg_2.jpg
+    ³       ³       hero_1.jpg
+    ³       ³       person_1.jpg
+    ³       ³       person_2.jpg
+    ³       ³       person_3.jpg
+    ³       ³       person_4.jpg
+    ³       ³       person_5.jpg
+    ³       ³       products_1.png
+    ³       ³       product_01.png
+    ³       ³       product_02.png
+    ³       ³       product_03.png
+    ³       ³       product_04.png
+    ³       ³       product_05.png
+    ³       ³       product_06.png
+    ³       ³       product_07_large.png
+    ³       ³       shoe.png
+    ³       ³       wave.svg
+    ³       ³       women.jpg
+    ³       ³       
+    ³       ÃÄÄÄjs
+    ³       ³       aos.js
+    ³       ³       bootstrap.min.js
+    ³       ³       jquery-3.3.1.min.js
+    ³       ³       jquery-ui.js
+    ³       ³       jquery.magnific-popup.min.js
+    ³       ³       main.js
+    ³       ³       owl.carousel.min.js
+    ³       ³       popper.min.js
+    ³       ³       slick.min.js
+    ³       ³       
+    ³       ÀÄÄÄscss
+    ³           ³   .DS_Store
+    ³           ³   style.scss
+    ³           ³   _site-base.scss
+    ³           ³   _site-blocks.scss
+    ³           ³   _site-navbar.scss
+    ³           ³   
+    ³           ÀÄÄÄbootstrap
+    ³               ³   .DS_Store
+    ³               ³   bootstrap-grid.scss
+    ³               ³   bootstrap-reboot.scss
+    ³               ³   bootstrap.scss
+    ³               ³   _alert.scss
+    ³               ³   _badge.scss
+    ³               ³   _breadcrumb.scss
+    ³               ³   _button-group.scss
+    ³               ³   _buttons.scss
+    ³               ³   _card.scss
+    ³               ³   _carousel.scss
+    ³               ³   _close.scss
+    ³               ³   _code.scss
+    ³               ³   _custom-forms.scss
+    ³               ³   _dropdown.scss
+    ³               ³   _forms.scss
+    ³               ³   _functions.scss
+    ³               ³   _grid.scss
+    ³               ³   _images.scss
+    ³               ³   _input-group.scss
+    ³               ³   _jumbotron.scss
+    ³               ³   _list-group.scss
+    ³               ³   _media.scss
+    ³               ³   _mixins.scss
+    ³               ³   _modal.scss
+    ³               ³   _nav.scss
+    ³               ³   _navbar.scss
+    ³               ³   _pagination.scss
+    ³               ³   _popover.scss
+    ³               ³   _print.scss
+    ³               ³   _progress.scss
+    ³               ³   _reboot.scss
+    ³               ³   _root.scss
+    ³               ³   _tables.scss
+    ³               ³   _tooltip.scss
+    ³               ³   _transitions.scss
+    ³               ³   _type.scss
+    ³               ³   _utilities.scss
+    ³               ³   _variables.scss
+    ³               ³   
+    ³               ÃÄÄÄmixins
+    ³               ³       _alert.scss
+    ³               ³       _background-variant.scss
+    ³               ³       _badge.scss
+    ³               ³       _border-radius.scss
+    ³               ³       _box-shadow.scss
+    ³               ³       _breakpoints.scss
+    ³               ³       _buttons.scss
+    ³               ³       _caret.scss
+    ³               ³       _clearfix.scss
+    ³               ³       _float.scss
+    ³               ³       _forms.scss
+    ³               ³       _gradients.scss
+    ³               ³       _grid-framework.scss
+    ³               ³       _grid.scss
+    ³               ³       _hover.scss
+    ³               ³       _image.scss
+    ³               ³       _list-group.scss
+    ³               ³       _lists.scss
+    ³               ³       _nav-divider.scss
+    ³               ³       _pagination.scss
+    ³               ³       _reset-text.scss
+    ³               ³       _resize.scss
+    ³               ³       _screen-reader.scss
+    ³               ³       _size.scss
+    ³               ³       _table-row.scss
+    ³               ³       _text-emphasis.scss
+    ³               ³       _text-hide.scss
+    ³               ³       _text-truncate.scss
+    ³               ³       _transition.scss
+    ³               ³       _visibility.scss
+    ³               ³       
+    ³               ÀÄÄÄutilities
+    ³                       _align.scss
+    ³                       _background.scss
+    ³                       _borders.scss
+    ³                       _clearfix.scss
+    ³                       _display.scss
+    ³                       _embed.scss
+    ³                       _flex.scss
+    ³                       _float.scss
+    ³                       _position.scss
+    ³                       _screenreaders.scss
+    ³                       _shadows.scss
+    ³                       _sizing.scss
+    ³                       _spacing.scss
+    ³                       _text.scss
+    ³                       _visibility.scss
+    ³                       
+    ÃÄÄÄimage
+    ³   ÀÄÄÄevents
+    ³           20dcbbcf-ec54-486e-9956-ed296d36d5c2.jpg
+    ³           67f44d59-7360-4c0f-9fed-4c68d18ded82.jpg
+    ³           
+    ÀÄÄÄimages
+            046bd6eb-0fd9-4ab3-8ff4-55d96f1b0374.jpg
+            4cd67a9d-f1e6-42f9-820b-519675b93feb.jpg
+            575e8747-c9c7-43c0-8cc1-232035f74376.jpg
+            c9f225af-462e-47cc-b488-365f2cb764ed.jpg
+            f2ff6b11-3a0d-4c33-a6ce-23e5f9f1d31e.jpg
+            

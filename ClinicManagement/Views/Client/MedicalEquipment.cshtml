@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ClinicManagement.Models.Product>
+
+@{
+    ViewData["Title"] = "Medical Equipment";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+}
+
+<h1 class="text-center mb-4">Medical Equipment</h1>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row mb-4">
+        <div class="col-md-6 offset-md-3">
+            <input type="text" id="searchBar" class="form-control" placeholder="Search by name..." onkeyup="filterProducts()">
+        </div>
+    </div>
+
+    <div class="row" id="productList">
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-6 col-lg-4 text-center item mb-4 pro-item"
+                    data-name="@(item.Name?.ToLower() ?? "unknown")">
+
+                <a href="@Url.Action("Details", "Client", new { id = item.ProductId })">
+                    <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid" style="max-width: 150px; height: auto;">
+                </a>
+
+                <h3 class="text-dark mt-2">
+                    <a href="@Url.Action("Details", "Client", new { id = item.ProductId })">
+                        @(item.Name ?? "Unknown Product")
+                    </a>
+                </h3>
+
+                <p class="price">
+                    <span>@item.Price.ToString("C")</span>
+                </p>
+
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-center text-muted">No products available.</p>
+}
+
+<script>
+    function filterProducts() {
+        let searchQuery = document.getElementById("searchBar").value.toLowerCase();
+        let products = document.querySelectorAll(".pro-item");
+
+        products.forEach(product => {
+            let productName = product.getAttribute("data-name") || "";
+
+            if (productName.includes(searchQuery) || searchQuery === "") {
+                product.style.display = "block";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    }
+</script>
