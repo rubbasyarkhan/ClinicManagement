@@ -78,6 +78,7 @@ public partial class ClinicManagementDbContext : DbContext
             entity.HasKey(e => e.EventId).HasName("PK__Educatio__7944C870FC585AE8");
 
             entity.Property(e => e.EventId).HasColumnName("EventID");
+            entity.Property(e => e.EventImage).HasMaxLength(255);
             entity.Property(e => e.EventName).HasMaxLength(255);
             entity.Property(e => e.Speaker).HasMaxLength(255);
         });

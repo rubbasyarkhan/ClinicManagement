@@ -17,5 +17,7 @@ public partial class EducationEvent
 
     public string? Description { get; set; }
 
+    public string? EventImage { get; set; }
+
     public virtual ICollection<EventRegistration> EventRegistrations { get; set; } = new List<EventRegistration>();
 }
