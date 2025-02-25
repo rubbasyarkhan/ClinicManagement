@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace ClinicManagement.Controllers
 {
@@ -56,6 +58,7 @@ namespace ClinicManagement.Controllers
 
         // 🔹 Login Logic
         [HttpPost]
+        [HttpPost]
         public IActionResult Login(string email, string password)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
@@ -66,13 +69,21 @@ namespace ClinicManagement.Controllers
                 return View();
             }
 
-            // Set session variables
-            HttpContext.Session.SetString("UserId", user.UserId.ToString());
-            HttpContext.Session.SetString("Username", user.Username);
-            HttpContext.Session.SetString("Role", user.Role);
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()), // Ensure this is set
+        new Claim(ClaimTypes.Name, user.Username),
+        new Claim(ClaimTypes.Role, user.Role)
+    };
+
+            var identity = new ClaimsIdentity(claims, "CustomAuth");
+            var principal = new ClaimsPrincipal(identity);
+
+            HttpContext.SignInAsync(principal);
 
             return RedirectToAction("Index", "Client");
         }
+
 
         // 🔹 Logout
         public IActionResult Logout()

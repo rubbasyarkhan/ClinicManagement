@@ -7,6 +7,7 @@
 
 <h1 class="text-center mb-4">Medicines</h1>
 
+<!-- Search & Filter Controls -->
 <div class="row mb-4">
     <div class="col-md-6">
         <input type="text" id="searchBar" class="form-control" placeholder="Search by name..." onkeyup="filterProducts()">
@@ -22,34 +23,38 @@
             }
         </select>
     </div>
-
 </div>
 
+<!-- Products List -->
 <div class="row" id="productList">
     @foreach (var item in Model)
     {
-        <div class="col-sm-6 col-lg-4 text-center item mb-4 pro-item"
+        <div class="col-md-6 col-lg-4 text-center item mb-4 pro-item"
              data-name="@(item.Name?.ToLower().Trim())"
              data-category="@(item.Category?.CategoryName.ToLower().Trim() ?? "unknown")">
 
-            <a href="@Url.Action("Details", "Client", new { id = item.ProductId })">
-                <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid" style="max-width: 150px; height: auto;">
+            <a href="@Url.Action("ProductDetails", "Client", new { id = item.ProductId })"
+               class="text-decoration-none">
+                <div class="card rounded border-0 p-3" style="width: 100%; max-width: 300px; margin: auto; cursor: pointer;">
+                    <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid rounded" style="max-width: 100%; height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h3 class="text-dark mt-2">@item.Name</h3>
+                        <p class="price text-success font-weight-bold">
+                            <span>@item.Price.ToString("C")</span>
+                        </p>
+                    </div>
+                </div>
             </a>
-            <h3 class="text-dark mt-2">
-                <a href="@Url.Action("Details", "Client", new { id = item.ProductId })">@item.Name</a>
-            </h3>
-            <p class="price">
-                <span>@item.Price.ToString("C")</span>
-            </p>
+
         </div>
     }
 </div>
 
-
+<!-- JavaScript for Search & Filter -->
 <script>
     function filterProducts() {
-        let searchQuery = document.getElementById("searchBar").value.toLowerCase();
-        let selectedCategory = document.getElementById("categoryFilter").value.trim().toLowerCase();
+        let searchQuery = document.getElementById("searchBar").value.toLowerCase().trim();
+        let selectedCategory = document.getElementById("categoryFilter").value.toLowerCase().trim();
         let products = document.querySelectorAll(".pro-item");
 
         products.forEach(product => {
@@ -59,12 +64,7 @@
             let nameMatches = productName.includes(searchQuery) || searchQuery === "";
             let categoryMatches = (productCategory === selectedCategory || selectedCategory === "");
 
-            if (nameMatches && categoryMatches) {
-                product.style.display = "block";
-            } else {
-                product.style.display = "none";
-            }
+            product.style.display = (nameMatches && categoryMatches) ? "block" : "none";
         });
     }
 </script>
-
