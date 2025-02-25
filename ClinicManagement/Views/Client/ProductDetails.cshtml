@@ -1,61 +1,115 @@
 ﻿@model ClinicManagement.Models.Product
 
 @{
-    ViewData["Title"] = "ProductDetails";
+    ViewData["Title"] = "Product Details";
     Layout = "~/Views/Shared/ClientLayout.cshtml";
 }
 
-<h1>ProductDetails</h1>
+<div class="site-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 mr-auto d-flex flex-column align-items-center">
+                <div class="w-100 border">
+                    <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid"
+                         style="width: 100%; height: 600px; object-fit: contain; padding: 15px;">
+                </div>
+            </div>
 
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StockQuantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StockQuantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Manufacturer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Manufacturer)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <div class="col-md-6">
+                <h2 class="text-black">@Model.Name</h2>
+                <p>@Model.Description</p>
+                <p><strong class="text-primary h4">$@Model.Price</strong></p>
+
+                <div class="mb-5">
+                    <div class="input-group mb-3" style="max-width: 220px;">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                        </div>
+                        <input type="text" class="form-control text-center" value="1">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <p><a href="cart.html" class="buy-now btn btn-sm height-auto px-4 py-3 btn-primary">Add To Cart</a></p>
+
+                <div class="mt-5">
+                    <table class="table custom-table">
+                        <tbody>
+                            <tr>
+                                <td><strong>Stock Quantity:</strong></td>
+                                <td class="bg-light">@Model.StockQuantity</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Manufacturer:</strong></td>
+                                <td class="bg-light">@Model.Manufacturer</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Category:</strong></td>
+                                <td class="bg-light">@Model.Category?.CategoryName</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="row mt-5">
+            <div class="col-md-8 offset-md-2">
+                <h3 class="text-center">Customer Feedback</h3>
+
+                @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+                {
+                    <ul class="list-group mb-4">
+                        @foreach (var feedback in Model.Feedbacks)
+                        {
+                            <li class="list-group-item">
+                                <strong>@feedback.User.FullName</strong> <small class="text-muted">(@feedback.CreatedAt?.ToString("MMMM dd, yyyy"))</small>
+                                <p class="mb-0">@feedback.Comment</p>
+                                <p class="mb-0">Rating: ⭐ @feedback.Rating/5</p>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted text-center">No feedback yet. Be the first to review!</p>
+                }
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <!-- Submit Feedback Form -->
+                    <h4 class="mt-4">Leave a Review</h4>
+                    <form asp-action="SubmitFeedback" asp-controller="Client" method="post">
+                        <input type="hidden" name="ProductId" value="@Model.ProductId" />
+
+                        <div class="form-group">
+                            <label for="Rating">Your Rating (1-5)</label>
+                            <select name="Rating" class="form-control" required>
+                                <option value="1">1 - Poor</option>
+                                <option value="2">2 - Fair</option>
+                                <option value="3">3 - Good</option>
+                                <option value="4">4 - Very Good</option>
+                                <option value="5">5 - Excellent</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Comment">Your Feedback</label>
+                            <textarea name="Comment" class="form-control" rows="4" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                    </form>
+
+                }
+                else
+                {
+                    <p class="text-center text-muted">Please <a href="/Auth/Login">login</a> to submit feedback.</p>
+                }
+            </div>
+        </div>
+    </div>
 </div>

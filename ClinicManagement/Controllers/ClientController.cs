@@ -2,9 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using ClinicManagement.Models; // Adjust namespace if needed
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace ClinicManagement.Controllers
 {
+
     public class ClientController : Controller
     {
         private readonly ClinicManagementDbContext _context;
@@ -28,10 +31,14 @@ namespace ClinicManagement.Controllers
             return View(products);
         }
 
+        [Route("product/{id}")] // Optional: Pretty URL like /product/5
+                                // Product Details (Used for both Medicines & Medical Equipment)
         public IActionResult ProductDetails(int id)
         {
             var product = _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Feedbacks)
+                    .ThenInclude(f => f.User) // Include User details
                 .AsNoTracking()
                 .FirstOrDefault(p => p.ProductId == id);
 
@@ -42,26 +49,81 @@ namespace ClinicManagement.Controllers
             return View(product);
         }
 
-        // Medicines Page
-        public IActionResult Medicines()
+
+
+        [HttpPost]
+        [Route("Client/SubmitFeedback")]
+        [Authorize]
+        public IActionResult SubmitFeedback(int ProductId, int Rating, string Comment)
         {
-            var medicines = _context.Products
+            Console.WriteLine($"Received Feedback: ProductId={ProductId}, Rating={Rating}, Comment={Comment}");
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                Console.WriteLine("User not authenticated.");
+                return Unauthorized();
+            }
+
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                Console.WriteLine("Invalid User ID.");
+                return BadRequest("Invalid user ID.");
+            }
+
+            var feedback = new Feedback
+            {
+                ProductId = ProductId,
+                UserId = userId,
+                Rating = Rating,
+                Comment = Comment,
+                CreatedAt = DateTime.Now
+            };
+
+            try
+            {
+                _context.Feedbacks.Add(feedback);
+                _context.SaveChanges();
+                Console.WriteLine("Feedback saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving feedback: {ex.Message}");
+                return BadRequest("Error saving feedback.");
+            }
+
+            return RedirectToAction("ProductDetails", "Client", new { id = ProductId });
+        }
+
+
+        [HttpGet]
+        public IActionResult Test()
+        {
+            return Ok("Test endpoint is working!");
+        }
+
+
+
+        // Medicines Page
+        public async Task<IActionResult> Medicines()
+        {
+            var medicines = await _context.Products
                 .Include(p => p.Category)
                 .AsNoTracking()
-                .Where(p => p.Category != null && p.Category.CategoryName != "Medical Equipment") // Null check
-                .ToList();
+                .Where(p => p.Category != null && p.Category.CategoryName != "Medical Equipment")
+                .ToListAsync();
 
             return View(medicines);
         }
 
         // Medical Equipment Page
-        public IActionResult MedicalEquipment()
+        public async Task<IActionResult> MedicalEquipment()
         {
-            var equipment = _context.Products
+            var equipment = await _context.Products
                 .Include(p => p.Category)
                 .AsNoTracking()
-                .Where(p => p.Category != null && p.Category.CategoryName == "Medical Equipment") // Null check
-                .ToList();
+                .Where(p => p.Category != null && p.Category.CategoryName == "Medical Equipment")
+                .ToListAsync();
 
             return View(equipment);
         }

@@ -19,14 +19,14 @@
         @foreach (var item in Model)
         {
             <div class="col-sm-6 col-lg-4 text-center item mb-4 pro-item"
-                    data-name="@(item.Name?.ToLower() ?? "unknown")">
+                 data-name="@(item.Name?.ToLower() ?? "unknown")">
 
-                <a href="@Url.Action("Details", "Client", new { id = item.ProductId })">
-                    <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid" style="max-width: 150px; height: auto;">
+                <a href="@Url.Action("ProductDetails", "Client", new { id = item.ProductId })" class="product-link">
+                    <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid product-img">
                 </a>
 
                 <h3 class="text-dark mt-2">
-                    <a href="@Url.Action("Details", "Client", new { id = item.ProductId })">
+                    <a href="@Url.Action("ProductDetails", "Client", new { id = item.ProductId })" class="product-title">
                         @(item.Name ?? "Unknown Product")
                     </a>
                 </h3>
@@ -51,12 +51,27 @@ else
 
         products.forEach(product => {
             let productName = product.getAttribute("data-name") || "";
-
-            if (productName.includes(searchQuery) || searchQuery === "") {
-                product.style.display = "block";
-            } else {
-                product.style.display = "none";
-            }
+            product.style.display = productName.includes(searchQuery) ? "block" : "none";
         });
     }
 </script>
+
+<style>
+    .product-img {
+        max-width: 180px;
+        height: auto;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .product-img:hover {
+            transform: scale(1.05);
+        }
+
+    .product-title {
+        text-decoration: none;
+    }
+
+        .product-title:hover {
+            text-decoration: underline;
+        }
+</style>
