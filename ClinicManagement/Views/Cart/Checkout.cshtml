@@ -1,0 +1,78 @@
+﻿@model ClinicManagement.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+}
+
+<div class="container mt-5">
+    
+
+
+    @if (Model.CartItems != null && Model.CartItems.Any())
+    {
+        <div class="row">
+            <div class="col-lg-8 order-lg-2">
+                <h1 class="text-center mb-3">Product Details</h1>
+                <table class="table table-sm table-borderless w-50 mx-auto">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <tr>
+                                <td>@item.Product.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Product.Price.ToString("C")</td>
+                                <td>$@(item.Quantity * item.Product.Price)</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="3" class="text-right font-weight-bold">Total:</td>
+                            <td class="font-weight-bold">@Model.TotalAmount.ToString("C")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-lg-4 order-lg-1">
+                <div class="card p-4 shadow">
+                    <h4 class="mb-3">Billing Details</h4>
+                    <form asp-action="PlaceOrder" method="post">
+                        <div class="form-group">
+                            <label for="ShippingAddress">Shipping Address</label>
+                            <input asp-for="ShippingAddress" class="form-control" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="PaymentMethod">Payment Method</label>
+                            <select asp-for="PaymentMethod" class="form-control">
+                                <option value="Cash on Delivery">Cash on Delivery</option>
+                            </select>
+                        </div>
+
+                        @* Hidden fields to send cart details *@
+                        @for (var i = 0; i < Model.CartItems.Count; i++)
+                        {
+                            <input type="hidden" name="OrderDetails[@i].ProductId" value="@Model.CartItems[i].ProductId" />
+                            <input type="hidden" name="OrderDetails[@i].Quantity" value="@Model.CartItems[i].Quantity" />
+                            <input type="hidden" name="OrderDetails[@i].Price" value="@Model.CartItems[i].Product.Price" />
+                        }
+
+                        <button type="submit" class="btn btn-success btn-block">Place Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="text-center mt-4">Your cart is empty. <a asp-action="Index" asp-controller="Cart" class="btn btn-primary">Go back to cart</a></p>
+    }
+</div>

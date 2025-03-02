@@ -5,40 +5,88 @@
     Layout = "~/Views/Shared/ClientLayout.cshtml";
 }
 
-<h1>Products</h1>
+<h1 class="text-center mb-4">Medicines</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.Description)</th>
-            <th>@Html.DisplayNameFor(model => model.Price)</th>
-            <th>@Html.DisplayNameFor(model => model.StockQuantity)</th>
-            <th>@Html.DisplayNameFor(model => model.Manufacturer)</th>
-            <th>Image</th> <!-- Updated to display an image instead of URL -->
-            
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                <td>@Html.DisplayFor(modelItem => item.StockQuantity)</td>
-                <td>@Html.DisplayFor(modelItem => item.Manufacturer)</td>
-                <td>
-                    <img src="@item.ImageUrl" alt="Product Image" width="100" height="100" style="object-fit: cover; border-radius: 8px;" />
-                </td>
-            
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<!-- Search & Filter Controls -->
+<div class="row mb-4 p-3 filter-container">
+    <div class="col-md-6">
+        <input type="text" id="searchBar" class="form-control search-input" placeholder="Search by name..." onkeyup="filterProducts()">
+    </div>
+    <div class="col-md-6">
+        <select id="categoryFilter" class="form-control category-select" onchange="filterProducts()">
+            <option value="">All Categories</option>
+            @foreach (var category in Model.Where(p => p.Category != null)
+            .Select(p => p.Category.CategoryName)
+            .Distinct())
+            {
+                <option value="@category">@category</option>
+            }
+        </select>
+    </div>
+</div>
+
+<style>
+    .filter-container {
+      
+        border-radius: 10px;
+        padding: 20px;
+        margin: 0 20px; /* Space on left and right */
+
+    }
+
+    .search-input, .category-select {
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #ffffff; /* Solid white input background */
+    }
+
+    
+
+      
+</style>
+
+
+<!-- Products List -->
+<div class="row" id="productList">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6 col-lg-4 text-center item mb-4 pro-item"
+             data-name="@(item.Name?.ToLower().Trim())"
+             data-category="@(item.Category?.CategoryName.ToLower().Trim() ?? "unknown")">
+
+            <a href="@Url.Action("ProductDetails", "Client", new { id = item.ProductId })"
+               class="text-decoration-none">
+                <div class="card rounded border-0 p-3" style="width: 100%; max-width: 300px; margin: auto; cursor: pointer;">
+                    <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid rounded" style="max-width: 100%; height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h3 class="text-dark mt-2">@item.Name</h3>
+                        <p class="price text-success font-weight-bold">
+                            <span>@item.Price.ToString("C")</span>
+                        </p>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    }
+</div>
+
+<!-- JavaScript for Search & Filter -->
+<script>
+    function filterProducts() {
+        let searchQuery = document.getElementById("searchBar").value.toLowerCase().trim();
+        let selectedCategory = document.getElementById("categoryFilter").value.toLowerCase().trim();
+        let products = document.querySelectorAll(".pro-item");
+
+        products.forEach(product => {
+            let productName = product.getAttribute("data-name")?.trim() || "";
+            let productCategory = product.getAttribute("data-category")?.trim().toLowerCase() || "";
+
+            let nameMatches = productName.includes(searchQuery) || searchQuery === "";
+            let categoryMatches = (productCategory === selectedCategory || selectedCategory === "");
+
+            product.style.display = (nameMatches && categoryMatches) ? "block" : "none";
+        });
+    }
+</script>

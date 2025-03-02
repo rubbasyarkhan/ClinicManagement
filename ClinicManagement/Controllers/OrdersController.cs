@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using ClinicManagement.Models;
 
@@ -16,260 +17,180 @@ namespace ClinicManagement.Controllers
             _context = context;
         }
 
-        // GET: Orders (With Filters)
-        public IActionResult Index(string status, string userName, DateTime? startDate, DateTime? endDate)
+        // GET: Orders - Accessible by Admin and Clients
+        public async Task<IActionResult> Index(string status, string userName, DateTime? startDate, DateTime? endDate)
         {
+            var userRole = User.IsInRole("Admin") ? "Admin" : "User";
+            var userId = User.Identity.Name;
+
             var ordersQuery = _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
                 .AsQueryable();
 
-            // Apply Filters
-            if (!string.IsNullOrEmpty(status))
+            // Clients can only see their own orders
+            if (userRole == "User")
             {
-                ordersQuery = ordersQuery.Where(o => o.OrderStatus == status);
+                ordersQuery = ordersQuery.Where(o => o.User.Username == userId);
             }
 
-            if (!string.IsNullOrEmpty(userName))
+            // Apply Filters (Admin Only)
+            if (userRole == "Admin")
             {
-                ordersQuery = ordersQuery.Where(o => o.User != null && o.User.FullName.Contains(userName));
+                if (!string.IsNullOrEmpty(status))
+                    ordersQuery = ordersQuery.Where(o => o.OrderStatus == status);
+
+                if (!string.IsNullOrEmpty(userName))
+                    ordersQuery = ordersQuery.Where(o => o.User.FullName.Contains(userName));
+
+                if (startDate.HasValue)
+                    ordersQuery = ordersQuery.Where(o => o.OrderDate >= startDate.Value);
+
+                if (endDate.HasValue)
+                    ordersQuery = ordersQuery.Where(o => o.OrderDate <= endDate.Value);
             }
 
-            if (startDate.HasValue)
-            {
-                ordersQuery = ordersQuery.Where(o => o.OrderDate >= startDate.Value);
-            }
+            var orders = await ordersQuery.ToListAsync();
 
-            if (endDate.HasValue)
-            {
-                ordersQuery = ordersQuery.Where(o => o.OrderDate <= endDate.Value);
-            }
-
-            var orders = ordersQuery.ToList();
-
-            // Ensure TotalAmount Calculation
+            // Calculate TotalAmount per Order
             foreach (var order in orders)
             {
                 order.TotalAmount = order.OrderDetails.Sum(od => od.Quantity * od.Price);
             }
 
-            // Calculate Total Revenue for Delivered Orders
-            ViewBag.TotalRevenue = orders
-                .Where(o => o.OrderStatus == "Delivered")
-                .Sum(o => o.TotalAmount);
-
-            // Pass Filters to View
-            ViewBag.SelectedStatus = status;
-            ViewBag.SelectedUserName = userName;
-            ViewBag.SelectedStartDate = startDate?.ToString("yyyy-MM-dd");
-            ViewBag.SelectedEndDate = endDate?.ToString("yyyy-MM-dd");
-
+            ViewBag.UserRole = userRole;
             return View(orders);
         }
 
-        // GET: Orders/Details/5
-        public IActionResult Details(int id)
+        // GET: Order Details - Accessible by Admin & Clients (Restricted to their orders)
+        public async Task<IActionResult> Details(int id)
         {
-            var order = _context.Orders
+            var userRole = User.IsInRole("Admin") ? "Admin" : "User";
+            var userId = User.Identity.Name;
+
+            var order = await _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
-                .FirstOrDefault(o => o.OrderId == id);
+                .FirstOrDefaultAsync(o => o.OrderId == id);
 
-            if (order == null)
-            {
+            if (order == null || (userRole == "User" && order.User.Username != userId))
                 return NotFound();
-            }
 
-            // Ensure TotalAmount Calculation
             order.TotalAmount = order.OrderDetails.Sum(od => od.Quantity * od.Price);
-
+            ViewBag.UserRole = userRole;
             return View(order);
         }
 
-        // POST: Update Order Status
+        // Admin - Update Order Status
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateStatus(int id, string status)
         {
-            if (id == 0 || string.IsNullOrEmpty(status))
-            {
-                TempData["Error"] = "Invalid request.";
-                return RedirectToAction(nameof(Index));
-            }
-
             var order = await _context.Orders
                 .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.Product) // Include products in the order
+                .ThenInclude(od => od.Product)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
 
             if (order == null)
+                return NotFound();
+
+            order.OrderStatus = status;
+
+            if (status == "Delivered")
             {
-                TempData["Error"] = "Order not found.";
-                return RedirectToAction(nameof(Index));
-            }
-
-            try
-            {
-                // Update order status
-                order.OrderStatus = status;
-
-                // If order status is "Delivered", update stock
-                if (status == "Delivered")
-                {
-                    foreach (var orderDetail in order.OrderDetails)
-                    {
-                        var product = orderDetail.Product;
-
-                        // Ensure stock quantity doesn't go negative
-                        if (product.StockQuantity >= orderDetail.Quantity)
-                        {
-                            product.StockQuantity -= orderDetail.Quantity; // Decrease stock
-                        }
-                        else
-                        {
-                            TempData["Error"] = "Not enough stock available for one or more products.";
-                            return RedirectToAction(nameof(Index));
-                        }
-                    }
-
-                    // Update products in database
-                    _context.Products.UpdateRange(order.OrderDetails.Select(od => od.Product));
-                }
-
-                // Save changes
-                await _context.SaveChangesAsync();
-                TempData["Success"] = "Order status updated successfully.";
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Failed to update order status. " + ex.Message;
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        // POST: Place an Order (Order Confirmation)
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateOrder(Order order)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(order);
-            }
-
-            try
-            {
-                // Ensure stock is available for each product in the order
                 foreach (var orderDetail in order.OrderDetails)
                 {
                     var product = orderDetail.Product;
-
                     if (product.StockQuantity >= orderDetail.Quantity)
-                    {
-                        product.StockQuantity -= orderDetail.Quantity; // Decrease stock
-                    }
+                        product.StockQuantity -= orderDetail.Quantity;
                     else
-                    {
-                        TempData["Error"] = $"Not enough stock for product: {product.Name}.";
-                        return RedirectToAction(nameof(Index));
-                    }
-
-                    // Update product in the database
-                    _context.Products.Update(product);
+                        return BadRequest("Not enough stock for " + product.Name);
                 }
-
-                // Add the order to the database
-                _context.Orders.Add(order);
-                await _context.SaveChangesAsync();
-
-                TempData["Success"] = "Order placed successfully.";
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Error placing order: " + ex.Message;
+                _context.Products.UpdateRange(order.OrderDetails.Select(od => od.Product));
             }
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
+        // POST: Client - Place an Order
+        [HttpPost]
+        [Authorize(Roles = "User")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateOrder([FromBody] Order order)
         {
-            var order = await _context.Orders
-                .Include(o => o.User)
-                .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.Product) // Ensure product details are included
-                .FirstOrDefaultAsync(o => o.OrderId == id);
+            if (order == null || order.OrderDetails == null || !order.OrderDetails.Any())
+                return Json(new { success = false, message = "Invalid order data." });
 
-            if (order == null)
+            var user = await _context.Users.FindAsync(order.UserId);
+            if (user == null)
+                return Json(new { success = false, message = "User not found." });
+
+            var productIds = order.OrderDetails.Select(od => od.ProductId).ToList();
+            var products = await _context.Products.Where(p => productIds.Contains(p.ProductId)).ToListAsync();
+
+            foreach (var orderDetail in order.OrderDetails)
             {
-                return NotFound();
+                var product = products.FirstOrDefault(p => p.ProductId == orderDetail.ProductId);
+                if (product == null || product.StockQuantity < orderDetail.Quantity)
+                    return Json(new { success = false, message = $"Not enough stock for {product?.Name ?? "one of the products"}." });
+
+                product.StockQuantity -= orderDetail.Quantity;
             }
 
-            return View(order); // Redirect to the Delete.cshtml view
+            order.OrderDate = DateTime.Now;
+            order.OrderStatus = "Pending";
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Order placed successfully!" });
         }
 
+        // Admin - Delete Order
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).FirstOrDefaultAsync(o => o.OrderId == id);
             if (order == null)
-            {
-                TempData["Error"] = "Order not found.";
-                return RedirectToAction(nameof(Index));
-            }
+                return NotFound();
 
-            try
+            if (order.OrderStatus == "Canceled")
             {
-                // If order is canceled, restock the products
-                if (order.OrderStatus == "Canceled")
+                foreach (var orderDetail in order.OrderDetails)
                 {
-                    foreach (var orderDetail in order.OrderDetails)
-                    {
-                        var product = orderDetail.Product;
-                        product.StockQuantity += orderDetail.Quantity; // Restock products
-                        _context.Products.Update(product);
-                    }
+                    var product = orderDetail.Product;
+                    product.StockQuantity += orderDetail.Quantity;
                 }
-
-                _context.Orders.Remove(order);
-                await _context.SaveChangesAsync();
-                TempData["Success"] = "Order deleted successfully.";
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Error deleting order: " + ex.Message;
+                _context.Products.UpdateRange(order.OrderDetails.Select(od => od.Product));
             }
 
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult PrintBill(int id)
+        // Admin & Client - Print Order Bill
+        public async Task<IActionResult> PrintBill(int id)
         {
-            var order = _context.Orders
+            var userRole = User.IsInRole("Admin") ? "Admin" : "User";
+            var userId = User.Identity.Name;
+
+            var order = await _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
-                .FirstOrDefault(o => o.OrderId == id);
+                .FirstOrDefaultAsync(o => o.OrderId == id);
 
-            if (order == null)
-            {
+            if (order == null || (userRole == "User" && order.User.Username != userId))
                 return NotFound();
-            }
 
-            // Ensure TotalAmount Calculation
             order.TotalAmount = order.OrderDetails.Sum(od => od.Quantity * od.Price);
-
             return View(order);
-        }
-
-        private bool OrderExists(int id)
-        {
-            return _context.Orders.Any(e => e.OrderId == id);
         }
     }
 }

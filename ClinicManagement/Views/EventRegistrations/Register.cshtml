@@ -1,0 +1,46 @@
+﻿@model ClinicManagement.Models.EventRegistration
+
+@{
+    ViewData["Title"] = "Confirm Event Registration";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>Confirm Registration</h3>
+        </div>
+        <div class="card-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <p class="text-center fs-5">Are you sure you want to register for this event?</p>
+
+            <form asp-action="ConfirmRegister" method="post">
+                <input type="hidden" asp-for="EventId" />
+
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-check"></i> Yes, Register
+                    </button>
+                    <a asp-controller="EducationEvents" asp-action="ClientEvents" class="btn btn-secondary px-4">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

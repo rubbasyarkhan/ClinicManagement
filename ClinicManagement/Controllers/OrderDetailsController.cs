@@ -21,7 +21,9 @@ namespace ClinicManagement.Controllers
         // GET: OrderDetails
         public async Task<IActionResult> Index()
         {
-            var clinicManagementDbContext = _context.OrderDetails.Include(o => o.Order).Include(o => o.Product);
+            var clinicManagementDbContext = _context.OrderDetails
+                .Include(o => o.Order)
+                .Include(o => o.Product);
             return View(await clinicManagementDbContext.ToListAsync());
         }
 
@@ -37,6 +39,7 @@ namespace ClinicManagement.Controllers
                 .Include(o => o.Order)
                 .Include(o => o.Product)
                 .FirstOrDefaultAsync(m => m.OrderDetailId == id);
+
             if (orderDetail == null)
             {
                 return NotFound();
@@ -49,25 +52,31 @@ namespace ClinicManagement.Controllers
         public IActionResult Create()
         {
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId");
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId");
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
             return View();
         }
 
         // POST: OrderDetails/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OrderDetailId,OrderId,ProductId,Quantity,Price")] OrderDetail orderDetail)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(orderDetail);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(orderDetail);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error while creating order detail: " + ex.Message);
+                }
             }
+
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", orderDetail.OrderId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", orderDetail.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", orderDetail.ProductId);
             return View(orderDetail);
         }
 
@@ -84,14 +93,13 @@ namespace ClinicManagement.Controllers
             {
                 return NotFound();
             }
+
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", orderDetail.OrderId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", orderDetail.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", orderDetail.ProductId);
             return View(orderDetail);
         }
 
         // POST: OrderDetails/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrderDetailId,OrderId,ProductId,Quantity,Price")] OrderDetail orderDetail)
@@ -107,6 +115,7 @@ namespace ClinicManagement.Controllers
                 {
                     _context.Update(orderDetail);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -119,10 +128,14 @@ namespace ClinicManagement.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error while updating order detail: " + ex.Message);
+                }
             }
+
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", orderDetail.OrderId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", orderDetail.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", orderDetail.ProductId);
             return View(orderDetail);
         }
 
@@ -138,6 +151,7 @@ namespace ClinicManagement.Controllers
                 .Include(o => o.Order)
                 .Include(o => o.Product)
                 .FirstOrDefaultAsync(m => m.OrderDetailId == id);
+
             if (orderDetail == null)
             {
                 return NotFound();
@@ -151,14 +165,21 @@ namespace ClinicManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var orderDetail = await _context.OrderDetails.FindAsync(id);
-            if (orderDetail != null)
+            try
             {
-                _context.OrderDetails.Remove(orderDetail);
+                var orderDetail = await _context.OrderDetails.FindAsync(id);
+                if (orderDetail != null)
+                {
+                    _context.OrderDetails.Remove(orderDetail);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction(nameof(Index));
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error while deleting order detail: " + ex.Message);
+                return View();
+            }
         }
 
         private bool OrderDetailExists(int id)

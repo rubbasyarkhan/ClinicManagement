@@ -1,0 +1,106 @@
+﻿@model IEnumerable<ClinicManagement.Models.Cart>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-end mb-4">
+        <a asp-action="OrderHistory" asp-controller="Cart" class="btn btn-info">View Order History</a>
+    </div>
+
+    <div class="site-section">
+        <div class="container">
+            @if (!Model.Any())
+            {
+                <p class="alert alert-warning text-center">Your cart is empty.</p>
+            }
+            else
+            {
+                <div class="row mb-5">
+                    <form class="col-md-12">
+                        <div class="site-blocks-table">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="product-thumbnail">Image</th>
+                                        <th class="product-name">Product</th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product-quantity">Quantity</th>
+                                        <th class="product-total">Total</th>
+                                        <th class="product-remove">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr id="cart-item-@item.CartId">
+                                            <td class="product-thumbnail">
+                                                <img src="@item.Product?.ImageUrl" alt="@item.Product?.Name" class="img-fluid" style="max-width: 80px;">
+                                            </td>
+                                            <td class="product-name">
+                                                <h2 class="h5 text-black">@item.Product?.Name</h2>
+                                            </td>
+                                            <td class="product-price">@($"{item.Product?.Price:C}")</td>
+                                            <td class="product-quantity">@item.Quantity</td>
+                                            <td class="product-total" id="total-@item.CartId">@($"{item.Quantity * item.Product?.Price:C}")</td>
+                                            <td>
+                                                <a href="javascript:void(0);" onclick="removeFromCart(@item.CartId)" class="btn btn-primary height-auto btn-sm">X</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary btn-md btn-block">Continue Shopping</a>
+                    </div>
+                    <div class="col-md-6 pl-5">
+                        <div class="row justify-content-end">
+                            <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-md-12 text-right border-bottom mb-5">
+                                        <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <span class="text-black">Subtotal</span>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <strong class="text-black" id="cart-total">@($"{Model.Sum(i => i.Quantity * i.Product.Price):C}")</strong>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if (Model.Any())
+                                        {
+                                            <a asp-action="Checkout" asp-controller="Cart" class="btn btn-primary btn-block">Proceed to Checkout</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function removeFromCart(cartId) {
+        fetch(`/Cart/RemoveFromCart?cartId=${cartId}`, { method: 'POST' })
+        .then(response => response.text())
+        .then(() => {
+            document.getElementById(`cart-item-${cartId}`).remove();
+            location.reload();
+        });
+    }
+</script>
