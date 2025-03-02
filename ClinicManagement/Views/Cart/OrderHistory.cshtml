@@ -1,0 +1,60 @@
+﻿@model List<ClinicManagement.ViewModels.OrderHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Order History";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Your Order History</h2>
+
+    @if (Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered mt-4">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>@order.OrderID</td>
+                            <td>@order.OrderDate.ToString("dd MMM yyyy")</td>
+                            <td>@order.TotalAmount.ToString("C")</td>
+                            <td><span class="badge badge-info">@order.OrderStatus</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-toggle="collapse" data-target="#order-@order.OrderID">
+                                    View Items
+                                </button>
+                            </td>
+                        </tr>
+                        <tr id="order-@order.OrderID" class="collapse">
+                            <td colspan="5">
+                                <ul class="list-group">
+                                    @foreach (var item in order.Items)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span>@item.ProductName (x @item.Quantity)</span>
+                                            <span>@(item.Quantity * item.Price) USD</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-center mt-4">You have no past orders. <a asp-action="Index" asp-controller="Products" class="btn btn-primary">Shop Now</a></p>
+    }
+</div>

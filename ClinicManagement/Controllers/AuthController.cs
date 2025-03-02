@@ -89,8 +89,10 @@ namespace ClinicManagement.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Login");
+            Response.Cookies.Delete(".AspNetCore.Cookies"); // Remove authentication cookie
+            return RedirectToAction("Login", "Auth");
         }
+
 
         // 🔹 Password Hashing
         private string HashPassword(string password)

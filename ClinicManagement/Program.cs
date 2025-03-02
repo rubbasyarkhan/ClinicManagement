@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -56,5 +57,10 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Client}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "eventRegistrations",
+    pattern: "EventRegistrations/{action}/{id?}",
+    defaults: new { controller = "EventRegistrations" });
 
 app.Run();

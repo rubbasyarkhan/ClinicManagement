@@ -25,14 +25,22 @@
                         <div class="input-group-prepend">
                             <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
                         </div>
-                        <input type="text" class="form-control text-center" value="1">
+                        <input type="text" class="form-control text-center" id="quantityField" name="Quantity" value="1">
                         <div class="input-group-append">
                             <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
                         </div>
                     </div>
                 </div>
 
-                <p><a href="cart.html" class="buy-now btn btn-sm height-auto px-4 py-3 btn-primary">Add To Cart</a></p>
+                <!-- ✅ Updated Add to Cart Form -->
+                <form asp-action="AddToCart" asp-controller="Cart" method="post">
+                    <input type="hidden" name="ProductId" value="@Model.ProductId" />
+                    <input type="hidden" name="Quantity" id="quantityInput" value="1" />
+
+                    <button type="submit" class="buy-now btn btn-sm height-auto px-4 py-3 btn-primary">
+                        Add To Cart
+                    </button>
+                </form>
 
                 <div class="mt-5">
                     <table class="table custom-table">
@@ -66,7 +74,8 @@
                         @foreach (var feedback in Model.Feedbacks)
                         {
                             <li class="list-group-item">
-                                <strong>@feedback.User.FullName</strong> <small class="text-muted">(@feedback.CreatedAt?.ToString("MMMM dd, yyyy"))</small>
+                                <strong>@feedback.User.FullName</strong>
+                                <small class="text-muted">(@feedback.CreatedAt?.ToString("MMMM dd, yyyy"))</small>
                                 <p class="mb-0">@feedback.Comment</p>
                                 <p class="mb-0">Rating: ⭐ @feedback.Rating/5</p>
                             </li>
@@ -103,7 +112,6 @@
 
                         <button type="submit" class="btn btn-primary">Submit Feedback</button>
                     </form>
-
                 }
                 else
                 {
@@ -113,3 +121,27 @@
         </div>
     </div>
 </div>
+
+<!-- ✅ JavaScript for Quantity Selection -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const minusBtn = document.querySelector(".js-btn-minus");
+        const plusBtn = document.querySelector(".js-btn-plus");
+        const quantityField = document.querySelector("#quantityField");
+        const quantityInput = document.querySelector("#quantityInput");
+
+        minusBtn.addEventListener("click", function () {
+            let qty = parseInt(quantityField.value);
+            if (qty > 1) {
+                quantityField.value = qty - 1;
+                quantityInput.value = qty - 1; // Update hidden input
+            }
+        });
+
+        plusBtn.addEventListener("click", function () {
+            let qty = parseInt(quantityField.value);
+            quantityField.value = qty + 1;
+            quantityInput.value = qty + 1; // Update hidden input
+        });
+    });
+</script>

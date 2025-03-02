@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ClinicManagement.Models.EducationEvent>
+
+@{
+    ViewData["Title"] = "Upcoming Events";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+}
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Upcoming Educational Events</h2>
+
+    <div class="row">
+        @foreach (var eventItem in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card mb-4 shadow-sm border-0" style="max-width: 280px; margin: auto; border-radius: 12px;">
+                    @if (!string.IsNullOrEmpty(eventItem.EventImage))
+                    {
+                        <img src="@Url.Content("~/image/events/" + eventItem.EventImage)"
+                             class="card-img-top"
+                             alt="Event Image"
+                             style="height: 180px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                    }
+                    <div class="card-body text-start">
+                        <h6 class="card-title fw-bold">@eventItem.EventName</h6>
+                        <p class="mb-1"><strong>Speaker:</strong> @eventItem.Speaker</p>
+                        <p class="mb-1"><strong>Date:</strong> @eventItem.EventDate.ToShortDateString()</p>
+                        <p class="mb-1"><strong>Time:</strong> @eventItem.EventTime</p>
+                        <div class="text-center mt-3">
+                            <a asp-controller="EventRegistrations" asp-action="Register" asp-route-eventId="@eventItem.EventId" class="btn btn-success">
+                                Register
+                            </a>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
