@@ -49,10 +49,7 @@
                         }
 
                         <form asp-controller="Auth" asp-action="Register" method="post">
-                            <div class="form-floating mb-3">
-                                <input type="text" name="FullName" class="form-control" placeholder="Full Name" required>
-                                <label>Full Name</label>
-                            </div>
+                           
                             <div class="form-floating mb-3">
                                 <input type="text" name="Username" class="form-control" placeholder="Username" required>
                                 <label>Username</label>
@@ -69,10 +66,7 @@
                                 <input type="text" name="PhoneNumber" class="form-control" placeholder="Phone Number">
                                 <label>Phone Number (Optional)</label>
                             </div>
-                            <div class="form-floating mb-3">
-                                <input type="text" name="Address" class="form-control" placeholder="Address">
-                                <label>Address (Optional)</label>
-                            </div>
+                           
                             <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
                             <p class="text-center mb-0">Already have an account? <a asp-action="Login">Sign In</a></p>
                         </form>

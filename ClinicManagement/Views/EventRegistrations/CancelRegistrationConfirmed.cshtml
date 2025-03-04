@@ -1,0 +1,31 @@
+﻿@model ClinicManagement.Models.EventRegistration
+
+@{
+    ViewData["Title"] = "Cancel Registration";
+    Layout = "~/Views/Shared/ClientLayout.cshtml";
+}
+
+<div class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg text-center">
+    <h2 class="text-3xl font-semibold text-red-600 mb-6">Cancel Event Registration</h2>
+
+    <p class="text-lg text-gray-800">
+        Are you sure you want to cancel your registration for
+        <strong class="text-gray-900">@Model.Event.EventName</strong>?
+    </p>
+
+    <form asp-action="CancelRegistrationConfirmed" method="post" class="mt-6">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="RegistrationId" />
+
+        <div class="flex justify-center gap-4">
+            <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300">
+                Confirm Cancellation
+            </button>
+
+            <a asp-action="MyRegistrations"
+               class="bg-gray-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-gray-600 transition duration-300">
+                Back to Registrations
+            </a>
+        </div>
+    </form>
+</div>
