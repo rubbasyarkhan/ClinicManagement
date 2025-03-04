@@ -19,6 +19,16 @@ namespace ClinicManagement.Controllers
 
         public IActionResult Index()
         {
+            var product = _context.Products
+         .Include(p => p.Category)
+         .AsNoTracking()
+         .Take(6) // Fetch only 6 products
+         .ToList();
+
+            return View(product);
+        }
+        public IActionResult About()
+        {
             return View();
         }
 

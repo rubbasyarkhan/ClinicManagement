@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace ClinicManagement.Controllers
 {
@@ -40,6 +41,12 @@ namespace ClinicManagement.Controllers
                 return View();
             }
 
+            if (!IsValidPassword(user.Password))
+            {
+                ViewBag.Error = "Password must be at least 8 characters long, contain an uppercase letter, lowercase letter, a number, and a special character.";
+                return View();
+            }
+
             user.Password = HashPassword(user.Password); // Hash password before saving
             user.Role = "User"; // Default role
 
@@ -58,7 +65,6 @@ namespace ClinicManagement.Controllers
 
         // 🔹 Login Logic
         [HttpPost]
-        [HttpPost]
         public IActionResult Login(string email, string password)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
@@ -70,11 +76,11 @@ namespace ClinicManagement.Controllers
             }
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()), // Ensure this is set
-        new Claim(ClaimTypes.Name, user.Username),
-        new Claim(ClaimTypes.Role, user.Role)
-    };
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
 
             var identity = new ClaimsIdentity(claims, "CustomAuth");
             var principal = new ClaimsPrincipal(identity);
@@ -84,7 +90,6 @@ namespace ClinicManagement.Controllers
             return RedirectToAction("Index", "Client");
         }
 
-
         // 🔹 Logout
         public IActionResult Logout()
         {
@@ -92,7 +97,6 @@ namespace ClinicManagement.Controllers
             Response.Cookies.Delete(".AspNetCore.Cookies"); // Remove authentication cookie
             return RedirectToAction("Login", "Auth");
         }
-
 
         // 🔹 Password Hashing
         private string HashPassword(string password)
@@ -102,6 +106,13 @@ namespace ClinicManagement.Controllers
                 byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return Convert.ToBase64String(bytes);
             }
+        }
+
+        // 🔹 Password Validation Function
+        private bool IsValidPassword(string password)
+        {
+            string pattern = @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$";
+            return Regex.IsMatch(password, pattern);
         }
     }
 }

@@ -31,7 +31,9 @@ namespace ClinicManagement.Controllers
         }
 
         // ✅ Get details of a specific registration (Admin or User who registered)
-        public async Task<IActionResult> Details(int? id)
+        // ✅ Show confirmation page for canceling registration (User can only cancel their own registration)
+        [Authorize]
+        public async Task<IActionResult> CancelRegistration(int? id)
         {
             if (id == null) return NotFound();
 
@@ -42,14 +44,43 @@ namespace ClinicManagement.Controllers
 
             if (eventRegistration == null) return NotFound();
 
-            // Ensure users can only see their own registrations
+            // Ensure user can only cancel their own registration (unless Admin)
             if (!User.IsInRole("Admin") && eventRegistration.UserId.ToString() != User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 return Forbid();
             }
 
-            return View(eventRegistration);
+            return View(eventRegistration); // Show confirmation page
         }
+
+        // ✅ Handle canceling event registration
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> CancelRegistrationConfirmed(int id)
+        {
+            var eventRegistration = await _context.EventRegistrations.FindAsync(id);
+            if (eventRegistration == null)
+                return NotFound();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Ensure only the user who registered or an Admin can cancel
+            if (!User.IsInRole("Admin") && eventRegistration.UserId.ToString() != userId)
+            {
+                return Forbid();
+            }
+
+            _context.EventRegistrations.Remove(eventRegistration);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Your event registration has been successfully canceled.";
+
+            return RedirectToAction("MyRegistrations");
+        }
+
+
 
         // ✅ Show form for user to register for an event
         [Authorize]
@@ -83,7 +114,7 @@ namespace ClinicManagement.Controllers
 
                 if (alreadyRegistered)
                 {
-                    ModelState.AddModelError(string.Empty, "You are already registered for this event.");
+                   
                     ViewData["EventId"] = new SelectList(_context.EducationEvents, "EventId", "EventName", eventRegistration.EventId);
                     return View(eventRegistration);
                 }
@@ -114,7 +145,7 @@ namespace ClinicManagement.Controllers
 
             if (alreadyRegistered)
             {
-                TempData["ErrorMessage"] = "You are already registered for this event.";
+                
                 return RedirectToAction("MyRegistrations"); // Redirect to the user's registered events
             }
 
