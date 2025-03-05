@@ -174,6 +174,7 @@ namespace ClinicManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         // Admin & Client - Print Order Bill
         public async Task<IActionResult> PrintBill(int id)
         {
