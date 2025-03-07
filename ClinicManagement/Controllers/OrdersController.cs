@@ -182,16 +182,21 @@ namespace ClinicManagement.Controllers
             var userId = User.Identity.Name;
 
             var order = await _context.Orders
-                .Include(o => o.User)
+                .Include(o => o.User) // Ensure User is included
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
 
-            if (order == null || (userRole == "User" && order.User.Username != userId))
+            if (order == null || (userRole == "User" && order.User?.Username != userId))
                 return NotFound();
 
             order.TotalAmount = order.OrderDetails.Sum(od => od.Quantity * od.Price);
+
+            // Pass the user's phone number to the view
+            ViewBag.UserPhoneNumber = order.User?.PhoneNumber;
+
             return View(order);
         }
+
     }
 }

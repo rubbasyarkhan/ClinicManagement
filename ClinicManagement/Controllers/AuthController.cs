@@ -109,10 +109,18 @@ namespace ClinicManagement.Controllers
         }
 
         // 🔹 Password Validation Function
+        // Password Validation Function
         private bool IsValidPassword(string password)
         {
-            string pattern = @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$";
+            string pattern = @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,20}$";
             return Regex.IsMatch(password, pattern);
+        }
+
+
+        // Phone Number Validation Function
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+            return Regex.IsMatch(phoneNumber, @"^\d{11}$");
         }
     }
 }

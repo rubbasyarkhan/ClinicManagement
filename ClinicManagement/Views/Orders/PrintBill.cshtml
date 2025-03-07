@@ -62,6 +62,7 @@
         <h4>Order #@Model.OrderId</h4>
 
         <p><strong>User:</strong> @(Model.User?.FullName ?? "Guest")</p>
+        <p><strong>Phone Number:</strong> @ViewBag.UserPhoneNumber</p>
         <p><strong>Email:</strong> @(Model.User?.Email ?? "N/A")</p>
         <p><strong>Order Date:</strong> @Model.OrderDate?.ToString("yyyy-MM-dd")</p>
         <p><strong>Payment Method:</strong> @Model.PaymentMethod</p>

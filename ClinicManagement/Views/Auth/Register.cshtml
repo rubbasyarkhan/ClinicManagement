@@ -63,8 +63,8 @@
                                 <label>Password</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" name="PhoneNumber" class="form-control" placeholder="Phone Number">
-                                <label>Phone Number (Optional)</label>
+                                <input type="text" name="PhoneNumber" class="form-control" placeholder="Phone Number" pattern="\d{12}" title="Phone number must be exactly 12 digits" required>
+                                <label>Phone Number (11 digits only)</label>
                             </div>
                            
                             <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
